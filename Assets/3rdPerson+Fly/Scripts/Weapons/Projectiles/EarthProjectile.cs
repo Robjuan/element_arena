@@ -1,17 +1,28 @@
 using UnityEngine;
+using System;
 
 public class EarthProjectile : ProjectileBase
 {
     private Transform m_lastTransform;
 
+    public override float GetMassFromSize()
+    {        
+        // this is real, however it means that mass increases incredibly fast with size
+        var radius = GetComponent<Renderer>().bounds.extents.magnitude;
+        var volume = (4/3) * Math.PI * Math.Pow(radius,2); // r^3 is real world, r^2 is much less punishing for giant rocks
+        return (float)volume * density;
+    }
+
     public override void UpdateMass()
     {
         if (rigidBody.transform != m_lastTransform)
         {
-            rigidBody.SetDensity(density);
+            var mass = GetMassFromSize();
+            rigidBody.mass = mass;
         }
 
         m_lastTransform = rigidBody.transform;
+        
     }
 
     public override void ApplyGravity()

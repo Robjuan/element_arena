@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,12 @@ using TMPro;
 
 public class ModifierDisplay : MonoBehaviour
 {
-    public enum TargetType
-    {
-        Modifier,
-        Output
-    }
+    [Tooltip("Target Modifier Type")]
+    public WeaponModifier.ModifierType m_TargetModifierType;
 
-    [Tooltip("Target type")]
-    public TargetType m_targetType;
+    [Tooltip("Target Modifier Type")]
+    public WeaponController.OutputType m_TargetOutputType;
 
-    [Tooltip("Target object Name")]
-    public string m_TargetName;
 
     PlayerWeaponsManager m_WeaponsManager;
     WeaponController m_ActiveWeapon;
@@ -34,27 +30,30 @@ public class ModifierDisplay : MonoBehaviour
     // called on update() by HUDManager
     public void UpdateSelf()
     {
-        if (m_targetType == TargetType.Output)
+        m_ActiveWeapon = m_WeaponsManager.GetActiveWeapon();
+        if (m_TargetOutputType != WeaponController.OutputType.None)
         {
-            UpdateOutput();
+           GetandUpdateOutputs();
         }
-        else if (m_targetType == TargetType.Modifier)
+        else if (m_TargetModifierType != WeaponModifier.ModifierType.None)
         {
-            UpdateModifier();
+            GetandUpdateModifiers();
         }
     }
 
-    void UpdateModifer()
+    void GetandUpdateModifiers()
     {
-        m_LastWeapon = m_ActiveWeapon;
-        m_ActiveWeapon = m_WeaponsManager.GetActiveWeapon();
+        //m_LastWeapon = m_ActiveWeapon;
+        //m_ActiveWeapon = m_WeaponsManager.GetActiveWeapon();
 
         if (m_ActiveWeapon.weaponModifierManager != null){
-             m_ModifierManager = m_ActiveWeapon.weaponModifierManager;
+
+            m_ModifierManager = m_ActiveWeapon.weaponModifierManager;
             var currentWeaponModifiers = m_ModifierManager.GetWeaponModifiers();
+
             for (int i = 0; i < currentWeaponModifiers.Count; i++)
             {
-                if (currentWeaponModifiers[i].modifierName.ToLower() == m_TargetName.ToLower())
+                if (currentWeaponModifiers[i].modifierType == m_TargetModifierType)
                 {
                     m_SelfTMP.SetText(currentWeaponModifiers[i].modifierValue.ToString());
                     break;
@@ -63,8 +62,17 @@ public class ModifierDisplay : MonoBehaviour
         }
     }
 
-    void UpdateOutput()
+    void GetandUpdateOutputs()
     {       
-        
+        foreach(var output in Enum.GetValues(typeof(WeaponController.OutputType)))
+        {
+            var outputType = (WeaponController.OutputType)output;
+            if (m_TargetOutputType == outputType)
+            {
+                var outputValue = m_ActiveWeapon.GetOutput(outputType, m_ActiveWeapon.projectilePrefab);
+                m_SelfTMP.SetText(Math.Round(outputValue).ToString());
+                break;
+            }
+        }
     }
 }

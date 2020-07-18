@@ -28,6 +28,8 @@ public abstract class ProjectileBase : MonoBehaviour
     public abstract void ApplyDrag();
     public abstract void UpdateMass();
 
+    public abstract float GetMassFromSize();
+
     protected void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody>();
@@ -47,6 +49,11 @@ public abstract class ProjectileBase : MonoBehaviour
         initialPosition = transform.position;
         // forcemode allows control of continuous vs instant , and mass-affected vs not
         rigidBody.AddForce(shotDirection * shootForce, ForceMode.Impulse);
+    }
+
+    public Rigidbody GetRigidBody()
+    {
+        return rigidBody;
     }
 
 }

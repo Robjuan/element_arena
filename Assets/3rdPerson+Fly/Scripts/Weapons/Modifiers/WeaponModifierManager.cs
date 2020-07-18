@@ -6,14 +6,7 @@ public class WeaponModifierManager : MonoBehaviour
 {
     [Tooltip("Modifiers Applied to this Weapon")]
     public List<WeaponModifier> l_modifiers;
-   
-    [Tooltip("Size scale")]
-    public float sizeScale;
-    [Tooltip("Speed scale")]
-    public float speedScale;
-    [Tooltip("Temperature scale")]
-    public float tempScale;
-    
+      
     [Tooltip("Maximum points available across all modifiers")]
     public int m_PointsAvailable;
 
@@ -25,42 +18,28 @@ public class WeaponModifierManager : MonoBehaviour
         l_modifiers.Add(modifier);
     }
 
-    public List<WeaponModifier> GetWeaponModifiers ()
+    public WeaponModifier GetWeaponModifier(WeaponModifier.ModifierType modType)
+    {
+        foreach (var mod in GetWeaponModifiers())
+        {
+            if (mod.modifierType == modType)
+            {
+                return mod;
+            }
+        }
+        return null;
+    }
+
+    public List<WeaponModifier> GetWeaponModifiers()
     {
         return l_modifiers;
     }
 
     public void ApplyModifiers(ProjectileBase projectile)
     {
-        foreach (var mod in l_modifiers)
+        foreach (var mod in GetWeaponModifiers())
         {
-            if (!mod.modifierActive)
-            {
-                continue;
-            }
-            
-            if (mod.modifierName.ToLower() == "size")
-            {
-                float scale = mod.modifierValue * sizeScale;
-                projectile.transform.localScale = new Vector3(scale,scale,scale);
-
-                continue;
-            }
-
-            if (mod.modifierName.ToLower() == "speed")
-            {
-                float scale = mod.modifierValue * speedScale;
-                projectile.shootForce = scale;
-
-                continue;
-            }
-            if (mod.modifierName.ToLower() == "temperature")
-            {
-                float scale = mod.modifierValue * tempScale;
-                projectile.temperature = scale;
-                continue;
-            }
-            
+            mod.ApplyModifier(projectile);
         }
         
     }
