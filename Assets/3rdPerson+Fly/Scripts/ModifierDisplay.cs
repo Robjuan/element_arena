@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// todo : redo this with an event system??
+
 public class ModifierDisplay : MonoBehaviour
 {
     [Tooltip("Target Modifier Type")]

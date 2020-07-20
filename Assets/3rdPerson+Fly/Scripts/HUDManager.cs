@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// TODO: event system
+
 public class HUDManager : MonoBehaviour
 {
     [Tooltip("Managed HUD Counters")]
