@@ -12,7 +12,7 @@ public class HUDManager : MonoBehaviour
     {
         foreach (var counter in l_counters)
         {
-            counter.UpdateSelf();
+            //counter.UpdateSelf();
         }
     }
     

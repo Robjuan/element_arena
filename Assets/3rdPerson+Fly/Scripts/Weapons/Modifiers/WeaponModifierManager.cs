@@ -74,7 +74,9 @@ public class WeaponModifierManager : MonoBehaviour
     {
         if(CanUpdateModifier(delta, mod))
         {
+            
             mod.modifierValue += delta;
+            GameEvents.current.ModifierChange(mod.modifierValue, mod.modifierType);
             // highlight in green
         }
         // highlight in red

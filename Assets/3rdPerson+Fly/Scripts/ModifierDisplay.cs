@@ -15,66 +15,32 @@ public class ModifierDisplay : MonoBehaviour
     [Tooltip("Target Modifier Type")]
     public WeaponController.OutputType m_TargetOutputType;
 
-
-    PlayerWeaponsManager m_WeaponsManager;
-    WeaponController m_ActiveWeapon;
     TextMeshProUGUI m_SelfTMP;
-    WeaponController m_LastWeapon;
-    WeaponModifierManager m_ModifierManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_WeaponsManager = FindObjectOfType<PlayerWeaponsManager>();
         m_SelfTMP = gameObject.GetComponent<TextMeshProUGUI>();
+
+        GameEvents.current.onModifierChange += UpdateModifierDisplay;
+        GameEvents.current.onOutputChange += UpdateOutputDisplay;
     }
 
-    // called on update() by HUDManager
-    public void UpdateSelf()
+    // event listeners
+    private void UpdateModifierDisplay(float newVal, WeaponModifier.ModifierType modType)
     {
-        m_ActiveWeapon = m_WeaponsManager.GetActiveWeapon();
-        if (m_TargetOutputType != WeaponController.OutputType.None)
+        if (m_TargetModifierType == modType)
         {
-           GetandUpdateOutputs();
-        }
-        else if (m_TargetModifierType != WeaponModifier.ModifierType.None)
-        {
-            GetandUpdateModifiers();
+            // inputs should always be ints
+            m_SelfTMP.SetText(newVal.ToString());
         }
     }
 
-    void GetandUpdateModifiers()
+    private void UpdateOutputDisplay(float newVal, WeaponController.OutputType outType)
     {
-        //m_LastWeapon = m_ActiveWeapon;
-        //m_ActiveWeapon = m_WeaponsManager.GetActiveWeapon();
-
-        if (m_ActiveWeapon.weaponModifierManager != null){
-
-            m_ModifierManager = m_ActiveWeapon.weaponModifierManager;
-            var currentWeaponModifiers = m_ModifierManager.GetWeaponModifiers();
-
-            for (int i = 0; i < currentWeaponModifiers.Count; i++)
-            {
-                if (currentWeaponModifiers[i].modifierType == m_TargetModifierType)
-                {
-                    m_SelfTMP.SetText(currentWeaponModifiers[i].modifierValue.ToString());
-                    break;
-                }
-            }    
-        }
-    }
-
-    void GetandUpdateOutputs()
-    {       
-        foreach(var output in Enum.GetValues(typeof(WeaponController.OutputType)))
+        if (m_TargetOutputType == outType)
         {
-            var outputType = (WeaponController.OutputType)output;
-            if (m_TargetOutputType == outputType)
-            {
-                var outputValue = m_ActiveWeapon.GetOutput(outputType, m_ActiveWeapon.projectilePrefab);
-                m_SelfTMP.SetText(Math.Round(outputValue).ToString());
-                break;
-            }
+            m_SelfTMP.SetText(Math.Round(newVal).ToString());
         }
     }
 }

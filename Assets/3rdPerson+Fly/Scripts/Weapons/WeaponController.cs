@@ -1,7 +1,11 @@
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class WeaponController : MonoBehaviour
 {
+    // if you fuck with these at all you have to check every reference in inspector
     public enum OutputType 
     {
         None,
@@ -24,53 +28,76 @@ public class WeaponController : MonoBehaviour
     [Tooltip("Delay between fires")]
     public float shotDelay;
     
+    // last value trackers
+    // > outputs
+    private Dictionary<OutputType, float> lastValues;
+    // > modifiers
     private float last_sizemod = 0.0f;
-    private float newest_mass = 0.0f;
  
+
     float m_LastTimeShot = Mathf.NegativeInfinity;
+    private float newest_mass = 0.0f;
 
-    public float GetOutput(OutputType outputType, ProjectileBase projectile1)
+    private void Awake()
     {
-        // things that require a test projectile
-        // ie, things that require mass
-        if (outputType == OutputType.Mass || outputType == OutputType.InitialVelocity)
-        {
-            // only do a new projectile if size has changed
-            if(last_sizemod != weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue)
-            {
-                var testProj = CreateModifiedProjectile(weaponModifierManager, projectile1, new Vector3(0,0,0), Quaternion.Euler(new Vector3(0,0,0)));
-                newest_mass = testProj.GetMassFromSize();
-                Destroy(testProj.gameObject);
-            }
-            last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
-
-            if (outputType == OutputType.Mass)
-            {
-                return newest_mass;
-            }            
-            else if (outputType == OutputType.InitialVelocity)
-            {
-                // consider tracking forcemod changes like sizemod
-                var forceMod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Force);
-                var shootforce = forceMod.modifierValue * forceMod.modifierScale;
-                float v = (shootforce/newest_mass)*Time.fixedDeltaTime;
-                return v * 100; // scale it up for display
-            }
-            
-        }
-        if (outputType == OutputType.Density)
-        {
-            // prefab density not the instance density
-            // will need to update this if density can be modified (unlikely)
-            return projectilePrefab.density;
-        }
-
-        return -1;
+        // create dict where key = outputType, value = last value
+        // these track the last values of the OUTPUTS and thus whether or not to update UI
+        // but we often need to know if the modifier has changed also to check whether or not to re-calc
+        // TODO: put those modifier trackers in a nice dictionary
+        lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().ToDictionary(v => v, v => 0.0f);
     }
 
+    private void Update()
+    {
+        checkOutputs();
+    }
+
+    public void checkOutputs()
+    {
+        // use toList here because we will modify the real lastValues while still looping
+        foreach(OutputType ot in lastValues.Keys.ToList())
+        {
+            Debug.Log(ot);
+            // things that need a test projectile
+            if (ot == OutputType.Mass || ot == OutputType.InitialVelocity)
+            {
+                // only do a new projectile if size has changed
+                if(last_sizemod != weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue)
+                {
+                    var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0,0,0), Quaternion.Euler(new Vector3(0,0,0)));
+                    newest_mass = testProj.GetMassFromSize();
+                    Destroy(testProj.gameObject);
+                    last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
+                }
+
+                if (ot == OutputType.Mass)// && lastValues[ot] != newest_mass)
+                {
+                    GameEvents.current.OutputChange(newest_mass, OutputType.Mass);
+                    lastValues[ot] = newest_mass;
+                    continue;
+                }            
+                else if (ot == OutputType.Density)
+                {
+                    GameEvents.current.OutputChange(projectilePrefab.density,OutputType.Density);
+                }
+                else if (ot == OutputType.InitialVelocity)// && lastValues[ot] != newest_mass)
+                {
+                    // consider tracking forcemod changes like sizemod
+                    var forceMod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Force);
+                    var shootforce = forceMod.modifierValue * forceMod.modifierScale;
+                    float v = (shootforce/newest_mass)*Time.fixedDeltaTime;
+                    GameEvents.current.OutputChange((v * 100), OutputType.InitialVelocity); // scale it up for display
+                    lastValues[ot] = v;
+                    continue; // redundant as last option
+                }
+                
+            }
+        }
+    }
+    
     public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, ProjectileBase prefab, Vector3 position, Quaternion rot)
     {
-            ProjectileBase newProjectile = Instantiate(projectilePrefab, position, rot);
+            ProjectileBase newProjectile = Instantiate(prefab, position, rot);
             modman.ApplyModifiers(newProjectile);
             return newProjectile;
     }

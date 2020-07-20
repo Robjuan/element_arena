@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1214891210}
   pivotOffset: {x: 0, y: 1, z: 0}
-  camOffset: {x: 0, y: 2, z: -5}
+  camOffset: {x: 0, y: 1.5, z: -4.75}
   smooth: 10
   horizontalAimingSpeed: 6
   verticalAimingSpeed: 6
@@ -1198,6 +1198,49 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1810596782}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1397643553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1397643555}
+  - component: {fileID: 1397643554}
+  m_Layer: 0
+  m_Name: GameEventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1397643554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397643553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b8615605c35ef4fb9a63691f7b91a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1397643555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397643553}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 99.26822, y: 10.960251, z: -38.995125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1502218181 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6937869118050693077, guid: 73dfa1012e20c924f9b46d99cf4a2168,
@@ -1862,6 +1905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EarthStaff
+      objectReference: {fileID: 0}
+    - target: {fileID: 1990278091576138136, guid: 2d99132c320880541abc5bb9576d83a7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1990278091576138141, guid: 2d99132c320880541abc5bb9576d83a7,
         type: 3}

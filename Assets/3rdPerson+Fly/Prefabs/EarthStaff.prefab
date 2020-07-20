@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 671e5cd9cc951684582c039739b59fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modifierName: Speed
+  modifierName: Force
   modifierType: 2
   modifierValue: 10
   modifierScale: 500

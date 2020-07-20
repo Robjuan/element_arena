@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WeaponModifier : MonoBehaviour
 {
+    // if you fuck with these at all you have to check every reference in inspector
     public enum ModifierType
     {
         None,
