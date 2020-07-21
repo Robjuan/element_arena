@@ -44,7 +44,7 @@ public class WeaponController : MonoBehaviour
         // these track the last values of the OUTPUTS and thus whether or not to update UI
         // but we often need to know if the modifier has changed also to check whether or not to re-calc
         // TODO: put those modifier trackers in a nice dictionary
-        lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().ToDictionary(v => v, v => 0.0f);
+        lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().Where(w => w != OutputType.None).ToDictionary(v => v, v => 0.0f);
     }
 
     private void Update()
@@ -57,7 +57,6 @@ public class WeaponController : MonoBehaviour
         // use toList here because we will modify the real lastValues while still looping
         foreach(OutputType ot in lastValues.Keys.ToList())
         {
-            Debug.Log(ot);
             // things that need a test projectile
             if (ot == OutputType.Mass || ot == OutputType.InitialVelocity)
             {
@@ -74,12 +73,8 @@ public class WeaponController : MonoBehaviour
                 {
                     GameEvents.current.OutputChange(newest_mass, OutputType.Mass);
                     lastValues[ot] = newest_mass;
-                    continue;
+                    //continue;
                 }            
-                else if (ot == OutputType.Density)
-                {
-                    GameEvents.current.OutputChange(projectilePrefab.density,OutputType.Density);
-                }
                 else if (ot == OutputType.InitialVelocity)// && lastValues[ot] != newest_mass)
                 {
                     // consider tracking forcemod changes like sizemod
@@ -88,9 +83,13 @@ public class WeaponController : MonoBehaviour
                     float v = (shootforce/newest_mass)*Time.fixedDeltaTime;
                     GameEvents.current.OutputChange((v * 100), OutputType.InitialVelocity); // scale it up for display
                     lastValues[ot] = v;
-                    continue; // redundant as last option
+                    //continue; // redundant as last option
                 }
                 
+            }
+            else if (ot == OutputType.Density)
+            {
+                GameEvents.current.OutputChange(projectilePrefab.density,OutputType.Density);
             }
         }
     }

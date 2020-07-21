@@ -24,8 +24,6 @@ public class WeaponModifier : MonoBehaviour
     [Tooltip("Modifier Button (see project input)")]
     public string modifierButton;
 
-    public WeaponModifierManager manager;
-
     public void ApplyModifier(ProjectileBase projectile)
     {
         if (modifierActive)
