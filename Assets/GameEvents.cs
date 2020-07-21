@@ -30,4 +30,13 @@ public class GameEvents : MonoBehaviour
             onOutputChange(newVal, outType);
         }
     }    
+
+    public event Action<float, Number_UIDisplay.DisplayTarget> onHealthChange;
+    public void HealthChange(float newVal, Number_UIDisplay.DisplayTarget displayTarget)
+    {
+        if (onHealthChange != null)
+        {
+            onHealthChange(newVal, displayTarget);
+        }
+    } 
 }

@@ -49,7 +49,7 @@ public class WeaponModifierManager : MonoBehaviour
         var goalValue = mod.modifierValue + delta;
         if (goalValue < 0 || goalValue > 999)
         {
-            Debug.Log("goal value outside range");
+            //Debug.Log("goal value outside range");
             return false;            
         }
 
@@ -63,7 +63,7 @@ public class WeaponModifierManager : MonoBehaviour
 
         if ((current_sum+delta) > m_PointsAvailable)  
         {
-            Debug.Log("not enough points avail: "+current_sum);
+            //Debug.Log("not enough points avail: "+current_sum);
             return false;
         }
 
@@ -74,7 +74,6 @@ public class WeaponModifierManager : MonoBehaviour
     {
         if(CanUpdateModifier(delta, mod))
         {
-            
             mod.modifierValue += delta;
             GameEvents.current.ModifierChange(mod.modifierValue, mod.modifierType);
             // highlight in green
