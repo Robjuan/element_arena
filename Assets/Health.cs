@@ -41,7 +41,7 @@ public class Health : MonoBehaviour
     {
         if (currentHealth <= 0f)
         {       
-            //var lava = targetcol.GetComponentInChildren<Damageable>();
+            GameEvents.current.ActorDeath(this.gameObject);
             currentHealth = 420;
         }
     }

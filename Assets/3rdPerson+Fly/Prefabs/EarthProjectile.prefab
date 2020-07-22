@@ -50,7 +50,7 @@ MonoBehaviour:
   shaderVar: _Power
   quadDragCoeff: 0.1
   gravity: 20
-  density: 20
+  density: 30
   ignitionTemperature: 0
   shootForce: 10
   temperature: 0
@@ -80,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5ca2280e394c8504e92d63df910aa185, type: 2}
+  - {fileID: 2100000, guid: 0ef7644dd48eef3449d1ec00d759238d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

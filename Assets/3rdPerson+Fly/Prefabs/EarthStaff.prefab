@@ -98,7 +98,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4627308828634331920, guid: cb100de93f6d1de45967889497e3f083,
     type: 3}
   shotDelay: 0.8
-  testobject: {fileID: 0}
 --- !u!95 &4604434778325849902
 Animator:
   serializedVersion: 3
@@ -202,7 +201,7 @@ MonoBehaviour:
   modifierName: Force
   modifierType: 2
   modifierValue: 10
-  modifierScale: 500
+  modifierScale: 750
   modifierActive: 1
   modifierButton: Modifier 2
 --- !u!114 &2822429469840747264

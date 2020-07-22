@@ -39,4 +39,13 @@ public class GameEvents : MonoBehaviour
             onHealthChange(newVal, displayTarget);
         }
     } 
+
+    public event Action<GameObject> onActorDeath;
+    public void ActorDeath(GameObject actor)
+    {
+        if (onActorDeath != null)
+        {
+            onActorDeath(actor);
+        }
+    } 
 }

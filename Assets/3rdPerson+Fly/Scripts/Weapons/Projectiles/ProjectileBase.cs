@@ -29,17 +29,22 @@ public abstract class ProjectileBase : MonoBehaviour
     protected Rigidbody rigidBody;
     protected Renderer rend;
 
+    protected Vector3 lastPosition;
+    protected float radius;
+
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
     public abstract void UpdateMass();
     public abstract void UpdateThermal();
 
     public abstract float GetMassFromSize();
+    public abstract float GetDamage();
 
     protected void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody>();
         rend = this.GetComponent<Renderer>();        
+        radius = GetComponent<Renderer>().bounds.extents.magnitude;
     }
 
     protected void FixedUpdate()
@@ -52,6 +57,58 @@ public abstract class ProjectileBase : MonoBehaviour
 
         ApplyGravity();
         ApplyDrag();
+    }
+
+    void Update()
+    {
+        // Hit detection
+        RaycastHit closestHit = new RaycastHit();
+        closestHit.distance = Mathf.Infinity;
+        bool foundHit = false;
+
+        // Sphere cast
+        Vector3 displacementSinceLastFrame = transform.position - lastPosition;
+        RaycastHit[] hits = Physics.SphereCastAll(lastPosition, radius, displacementSinceLastFrame.normalized, displacementSinceLastFrame.magnitude);
+        foreach (var hit in hits)
+        {
+            if (IsHitValid(hit) && hit.distance < closestHit.distance)
+            {
+                foundHit = true;
+                closestHit = hit;
+            }
+        }
+
+        if (foundHit)
+        {
+            // Handle case of casting while already inside a collider
+            if(closestHit.distance <= 0f)
+            {
+                closestHit.point = transform.position;
+                closestHit.normal = -transform.forward;
+            }
+
+            OnHit(closestHit.point, closestHit.collider);
+        }
+
+        lastPosition = transform.position;
+    }
+
+    protected void OnHit(Vector3 point, Collider collider)
+    {
+        Damageable damageable = collider.GetComponent<Damageable>();
+        if (damageable)
+        {
+            damageable.InflictDamage(GetDamage(), this.gameObject);
+        }
+    }
+
+    protected bool IsHitValid(RaycastHit hit)
+    {
+        if(hit.collider.GetComponent<Damageable>() == null)
+        {
+            return false;
+        }
+        return true;
     }
 
     public void Shoot(Vector3 shotDirection)

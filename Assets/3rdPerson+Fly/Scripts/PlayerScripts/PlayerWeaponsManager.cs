@@ -39,14 +39,9 @@ public class PlayerWeaponsManager : MonoBehaviour
                 weaponInstance.transform.localPosition = Vector3.zero;
                 weaponInstance.transform.localRotation = Quaternion.identity;
 
-                /*
-                // Set owner to this gameObject so the weapon can alter projectile/damage logic accordingly
-                weaponInstance.owner = gameObject;
-                weaponInstance.sourcePrefab = weaponPrefab.gameObject;
-                */
-
                 // set the projectile spawn point to the player
                 // TODO: if this is on the weapon or player depends on if the weapons are "upgrades" or not, and if the spell comes out of them or player
+                // TODO: push the spawn point out more by radius of projectile
                 weaponInstance.projectileSpawnPoint = this.projectileSpawnPoint;
 
                 // Handle auto-switching to weapon if no weapons currently
