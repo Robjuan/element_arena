@@ -28,8 +28,6 @@ public class WeaponController : MonoBehaviour
     [Tooltip("Delay between fires")]
     public float shotDelay;
 
-    public Transform testobject;
-    
     // last value trackers
     // > outputs
     private Dictionary<OutputType, float> lastValues;
@@ -39,13 +37,6 @@ public class WeaponController : MonoBehaviour
 
     float m_LastTimeShot = Mathf.NegativeInfinity;
     private float newest_mass = 0.0f;
-
-    private void ModifyTestObject()
-    {
-        var rend = testobject.GetComponent<Renderer>();
-        float testvar = Mathf.PingPong(Time.time, 10.0f);
-        rend.material.SetFloat("_Power", testvar);
-    }
 
     private void Awake()
     {
@@ -59,7 +50,6 @@ public class WeaponController : MonoBehaviour
     private void Update()
     {
         checkOutputs();
-        ModifyTestObject();
     }
 
     public void checkOutputs()

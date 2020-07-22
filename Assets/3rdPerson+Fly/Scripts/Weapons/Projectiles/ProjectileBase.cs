@@ -42,11 +42,6 @@ public abstract class ProjectileBase : MonoBehaviour
         rend = this.GetComponent<Renderer>();        
     }
 
-    protected void updateShaderVar(float newVal)
-    {
-        rend.material.SetFloat(shaderVar, newVal);
-    }
-
     protected void FixedUpdate()
     {
         // appearance first to prevent flashing?

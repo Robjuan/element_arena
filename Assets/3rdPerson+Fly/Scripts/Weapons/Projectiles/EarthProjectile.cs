@@ -27,25 +27,22 @@ public class EarthProjectile : ProjectileBase
 
     public override void UpdateThermal()
     {
-        // transform object . temp into a good shader variable
-        // grit buildup shader values:
-        // 0 - fully lava'd
-        // 10 - almost fully rock
-        // 100 - totally rock -- only small change from 10. 
-        // good enough to scale to 0-10 for now.
+        // TODO : an effect i'm actually excited about
 
-        // temps above 40 will be all lava'd  // TODO: ignition??
-        // temp 40 = shader 0
-        // temp 0 = shader 10
+        float temp_max = 40f;
+        float temp_min = 0f;
+        
+        float scaled = ((this.temperature - temp_min) / (temp_max - temp_min));
 
-        // convert to 0-10 range
-        var scaled = (this.temperature / 40) * 10;
+        var rend = this.GetComponent<Renderer>();
 
-        // invert, shader gets "cooler" with higher vals // (max + min) - num
-        var shaderVal = 10f - scaled;
+        // this brown is very light - how to do dark rocks
+        Color brown = new Color(0.1f,0.02f,0f,1f);
+        Color orange = new Color(0.98f,0.44f,0.06f,1f);
 
-        updateShaderVar(shaderVal);
+        rend.material.color = Color.Lerp(brown, orange,scaled);
     }
+
 
     public override void ApplyGravity()
     {
