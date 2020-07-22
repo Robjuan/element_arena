@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5206051640486584988}
+  - component: {fileID: 4627308828634331920}
   - component: {fileID: 5206051640486584989}
   - component: {fileID: 5206051640486584990}
   - component: {fileID: 5206051640486584991}
   - component: {fileID: 795212801073549286}
-  - component: {fileID: 4627308828634331920}
   m_Layer: 9
   m_Name: EarthProjectile
   m_TagString: Untagged
@@ -35,6 +35,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4627308828634331920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5206051640486584985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c317f3a4a0149149bbc4cad98a14f83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderVar: _Power
+  quadDragCoeff: 0.1
+  gravity: 20
+  density: 20
+  ignitionTemperature: 0
+  shootForce: 10
+  temperature: 0
 --- !u!33 &5206051640486584989
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -61,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fed4e78bda2b3de45954637fee164b8c, type: 2}
+  - {fileID: 2100000, guid: 40d0c04f846f37b479c375e58baa864a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,21 +130,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &4627308828634331920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206051640486584985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c317f3a4a0149149bbc4cad98a14f83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  quadDragCoeff: 0.1
-  gravity: 20
-  density: 10
-  ignitionTemperature: 0
-  shootForce: 10
-  temperature: 0

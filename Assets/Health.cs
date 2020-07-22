@@ -40,8 +40,8 @@ public class Health : MonoBehaviour
     private void HandleDeath()
     {
         if (currentHealth <= 0f)
-        {
-            // die
+        {       
+            //var lava = targetcol.GetComponentInChildren<Damageable>();
             currentHealth = 420;
         }
     }

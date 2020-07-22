@@ -6,6 +6,10 @@ using UnityEngine;
 
 public abstract class ProjectileBase : MonoBehaviour
 {   
+    [Header("Graphics")]
+    [Tooltip("Shadervar")]
+    public string shaderVar = "_Power";
+
     [Header("Physics")]
     [Tooltip("Quadratic Drag Coefficient")]
     public float quadDragCoeff = 0.1f;
@@ -23,22 +27,33 @@ public abstract class ProjectileBase : MonoBehaviour
     public Vector3 initialPosition { get; protected set; }
     public Vector3 initialDirection { get; protected set; }
     protected Rigidbody rigidBody;
+    protected Renderer rend;
 
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
     public abstract void UpdateMass();
+    public abstract void UpdateThermal();
 
     public abstract float GetMassFromSize();
 
     protected void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody>();
+        rend = this.GetComponent<Renderer>();        
+    }
+
+    protected void updateShaderVar(float newVal)
+    {
+        rend.material.SetFloat(shaderVar, newVal);
     }
 
     protected void FixedUpdate()
     {
+        // appearance first to prevent flashing?
+        UpdateThermal();
+
         // physics updates must come before applys
-        UpdateMass();
+        UpdateMass();      
 
         ApplyGravity();
         ApplyDrag();
