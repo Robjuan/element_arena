@@ -119,7 +119,7 @@ Material:
     - _NormalTimeScale: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Power: 5.22
+    - _Power: 30.95
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

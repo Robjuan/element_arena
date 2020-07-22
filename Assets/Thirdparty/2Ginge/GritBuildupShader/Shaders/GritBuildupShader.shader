@@ -108,12 +108,12 @@ Shader "2Ginge/GritBuildupShader" {
                 float2 uv1 : TEXCOORD1;
                 float2 uv2 : TEXCOORD2;
                 float4 uvAN : TEXCOORD9;
-                float4 uvSH : TEXCOORD8;
+                float4 uvSH : TEXCOORD13;
                 float4 posWorld : TEXCOORD3;
                 float3 normalDir : TEXCOORD4;
                 float3 tangentDir : TEXCOORD5;
                 float3 bitangentDir : TEXCOORD6;
-                LIGHTING_COORDS(7,8)
+                LIGHTING_COORDS(11,12)
                 UNITY_FOG_COORDS(9)
                 #if defined(LIGHTMAP_ON) || defined(UNITY_SHOULD_SAMPLE_SH)
                     float4 ambientOrLightmapUV : TEXCOORD10;
@@ -372,7 +372,7 @@ Shader "2Ginge/GritBuildupShader" {
             #pragma domain domain
             #pragma vertex tessvert
             #pragma fragment frag
-            #define UNITY_PASS_FORWARDADD
+//            #define UNITY_PASS_FORWARDADD
             #define SHOULD_SAMPLE_SH ( defined (LIGHTMAP_OFF) && defined(DYNAMICLIGHTMAP_OFF) )
             #define _GLOSSYENV 1
             #include "UnityCG.cginc"
@@ -430,7 +430,7 @@ Shader "2Ginge/GritBuildupShader" {
                 float2 uv1 : TEXCOORD1;
                 float2 uv2 : TEXCOORD2;
 				float4 uvAN : TEXCOORD9;
-                float4 uvSH : TEXCOORD8;
+                float4 uvSH : TEXCOORD13;
                 float4 posWorld : TEXCOORD3;
                 float3 normalDir : TEXCOORD4;
                 float3 tangentDir : TEXCOORD5;
