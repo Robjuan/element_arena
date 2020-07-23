@@ -7,7 +7,7 @@ public class EarthProjectile : ProjectileBase
 
     public override float GetDamage()
     {
-        Debug.Log("mass = " + rigidBody.mass + "temp = " + temperature + "v = " + rigidBody.velocity.magnitude);
+        //Debug.Log("mass = " + rigidBody.mass + "temp = " + temperature + "v = " + rigidBody.velocity.magnitude);
         return rigidBody.mass * temperature * rigidBody.velocity.magnitude;
     }
 

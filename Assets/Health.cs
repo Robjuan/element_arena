@@ -3,9 +3,11 @@ using System;
 
 public class Health : MonoBehaviour
 {
+
     [Tooltip("Maximum amount of health")]
     public float maxHealth = 10f;
 
+    private bool isDead = false;
     public float currentHealth { get; set; }
 
     private void Start()
@@ -41,10 +43,10 @@ public class Health : MonoBehaviour
 
     private void HandleDeath()
     {
-        if (currentHealth <= 0f)
+        if (currentHealth <= 0f && !isDead)
         {       
-            GameEvents.current.ActorDeath(this.gameObject);
-            currentHealth = 420;
+            GameEvents.current.ActorDeath(this.gameObject);           
+            isDead = true;
         }
     }
 }

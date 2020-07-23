@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class Damageable : MonoBehaviour
 {
     [Tooltip("Multiplier to apply to the received damage")]
