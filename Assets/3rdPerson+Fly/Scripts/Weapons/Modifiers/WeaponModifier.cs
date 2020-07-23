@@ -45,6 +45,7 @@ public class WeaponModifier : MonoBehaviour
             {
                 float scale = modifierValue * modifierScale;
                 projectile.temperature = scale;
+                projectile.UpdateThermal();
             }
         }
     }

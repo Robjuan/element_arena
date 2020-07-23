@@ -1209,7 +1209,7 @@ GameObject:
   - component: {fileID: 6409868990984468626}
   - component: {fileID: 3813198470866435737}
   m_Layer: 8
-  m_Name: shadow
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

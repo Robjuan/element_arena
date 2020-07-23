@@ -96,9 +96,9 @@ public class WeaponController : MonoBehaviour
     
     public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, ProjectileBase prefab, Vector3 position, Quaternion rot)
     {
-            ProjectileBase newProjectile = Instantiate(prefab, position, rot);
-            modman.ApplyModifiers(newProjectile);
-            return newProjectile;
+        ProjectileBase newProjectile = Instantiate(prefab, position, rot);
+        modman.ApplyModifiers(newProjectile);
+        return newProjectile;
     }
 
     public void HandleShoot()
@@ -107,7 +107,6 @@ public class WeaponController : MonoBehaviour
         {
             Vector3 shotDirection = GetShotDirection(); 
             var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, projectileSpawnPoint.position, Quaternion.LookRotation(shotDirection));
-
             newproj.Shoot(shotDirection);
             m_LastTimeShot = Time.time;
         }

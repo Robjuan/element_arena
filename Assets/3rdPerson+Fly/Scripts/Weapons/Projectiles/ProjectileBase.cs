@@ -6,10 +6,6 @@ using UnityEngine;
 
 public abstract class ProjectileBase : MonoBehaviour
 {   
-    [Header("Graphics")]
-    [Tooltip("Shadervar")]
-    public string shaderVar = "_Power";
-
     [Header("Physics")]
     [Tooltip("Quadratic Drag Coefficient")]
     public float quadDragCoeff = 0.1f;
@@ -21,9 +17,14 @@ public abstract class ProjectileBase : MonoBehaviour
     [Tooltip("Temperature at which projectile catches fire")]
     public float ignitionTemperature;
 
+    [Tooltip("Inactive projectiles can't collide or be rendered")]
+    public bool isActive = false;
+
     public float shootForce;
     public float temperature;
-  
+
+    //public LayerMask layerMask = -1;
+
     public Vector3 initialPosition { get; protected set; }
     public Vector3 initialDirection { get; protected set; }
     protected Rigidbody rigidBody;
@@ -42,9 +43,8 @@ public abstract class ProjectileBase : MonoBehaviour
 
     protected void Awake()
     {
-        rigidBody = this.GetComponent<Rigidbody>();
-        rend = this.GetComponent<Renderer>();        
-        radius = GetComponent<Renderer>().bounds.extents.magnitude;
+        rigidBody = GetComponent<Rigidbody>();
+        rend = this.GetComponentInChildren<Renderer>();        
     }
 
     protected void FixedUpdate()
@@ -59,57 +59,16 @@ public abstract class ProjectileBase : MonoBehaviour
         ApplyDrag();
     }
 
-    void Update()
+    protected void OnCollisionEnter(Collision coll)
     {
-        // Hit detection
-        RaycastHit closestHit = new RaycastHit();
-        closestHit.distance = Mathf.Infinity;
-        bool foundHit = false;
-
-        // Sphere cast
-        Vector3 displacementSinceLastFrame = transform.position - lastPosition;
-        RaycastHit[] hits = Physics.SphereCastAll(lastPosition, radius, displacementSinceLastFrame.normalized, displacementSinceLastFrame.magnitude);
-        foreach (var hit in hits)
-        {
-            if (IsHitValid(hit) && hit.distance < closestHit.distance)
-            {
-                foundHit = true;
-                closestHit = hit;
-            }
-        }
-
-        if (foundHit)
-        {
-            // Handle case of casting while already inside a collider
-            if(closestHit.distance <= 0f)
-            {
-                closestHit.point = transform.position;
-                closestHit.normal = -transform.forward;
-            }
-
-            OnHit(closestHit.point, closestHit.collider);
-        }
-
-        lastPosition = transform.position;
-    }
-
-    protected void OnHit(Vector3 point, Collider collider)
-    {
-        Damageable damageable = collider.GetComponent<Damageable>();
+        var other = coll.gameObject;
+        Damageable damageable = other.GetComponent<Damageable>();
         if (damageable)
         {
             damageable.InflictDamage(GetDamage(), this.gameObject);
         }
     }
 
-    protected bool IsHitValid(RaycastHit hit)
-    {
-        if(hit.collider.GetComponent<Damageable>() == null)
-        {
-            return false;
-        }
-        return true;
-    }
 
     public void Shoot(Vector3 shotDirection)
     {

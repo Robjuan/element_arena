@@ -26,7 +26,9 @@ public class Health : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
-        GameEvents.current.HealthChange(currentHealth, Number_UIDisplay.DisplayTarget.Health);
+        if (this.gameObject.tag == "Player"){
+            GameEvents.current.HealthChange(currentHealth, Number_UIDisplay.DisplayTarget.Health);
+        }
 
         HandleDeath();
     }

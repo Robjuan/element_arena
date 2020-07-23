@@ -3,10 +3,11 @@ using System;
 
 public class EarthProjectile : ProjectileBase
 {
-    private Transform m_lastTransform;
+    private Vector3 lastLocalScale;
 
     public override float GetDamage()
     {
+        Debug.Log("mass = " + rigidBody.mass + "temp = " + temperature + "v = " + rigidBody.velocity.magnitude);
         return rigidBody.mass * temperature * rigidBody.velocity.magnitude;
     }
 
@@ -17,21 +18,21 @@ public class EarthProjectile : ProjectileBase
         // mass should not decrease too fast at low numbers (miniscule lazer projectiles are bad (no visual feedback, hard physics))
         // mass should not get out of hand at large sizes (giant immovable boulders are bad (niche use case - doable at max size))
         // mass should otherwise smoothly increase 
-
+        var radius = rend.bounds.extents.magnitude;
         var volume = (4/3) * Math.PI * Math.Pow(radius,2); // r^3 is real world, r^2 is much less punishing for giant rocks
-        return (float)volume * density;
+        var retval = (float)volume * density;
+        return retval;
     }
 
     public override void UpdateMass()
     {
-        
-        if (rigidBody.transform != m_lastTransform)
+        if (rigidBody.transform.localScale != lastLocalScale)
         {
             var mass = GetMassFromSize();
             rigidBody.mass = mass;
         }
 
-        m_lastTransform = rigidBody.transform;
+        lastLocalScale = rigidBody.transform.localScale;
         
     }
 
@@ -44,8 +45,6 @@ public class EarthProjectile : ProjectileBase
         float temp_min = 5f;
         
         float scaled = ((this.temperature - temp_min) / (temp_max - temp_min));
-
-        var rend = this.GetComponent<Renderer>();
 
         // this brown is very light - how to do dark rocks
         Color brown = new Color(0.1f,0.02f,0f,1f);
