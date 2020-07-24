@@ -1031,7 +1031,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7948113205738448132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d45d299c8bef468f5c20afa46a8ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e41a2a38cb9fe54588c9d3f919b7fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
@@ -1045,10 +1045,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7948113205738448132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9005f50ef058185419f240c8ac9aee04, type: 3}
+  m_Script: {fileID: 11500000, guid: b3c8293d408942a42ab67e7c7b61bddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 100
 --- !u!114 &5818782381066743334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1058,7 +1058,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7948113205738448132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41eb942dbe35d7c4abb6987982b6be91, type: 3}
+  m_Script: {fileID: 11500000, guid: 05afb2f7ee774804db6554fedc2efb62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   walkTarget: {fileID: 0}

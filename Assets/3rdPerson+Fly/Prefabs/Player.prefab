@@ -1360,7 +1360,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 739230869707696062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f81cddde7e01114b910c5bcc443a5fa, type: 3}
+  m_Script: {fileID: 11500000, guid: e05a76b567e9bab4395e61c71111e0c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startingWeapons:
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 739230869707696062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d45d299c8bef468f5c20afa46a8ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e41a2a38cb9fe54588c9d3f919b7fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
@@ -1391,10 +1391,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 739230869707696062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9005f50ef058185419f240c8ac9aee04, type: 3}
+  m_Script: {fileID: 11500000, guid: b3c8293d408942a42ab67e7c7b61bddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 100
 --- !u!1 &739230869707696064
 GameObject:
   m_ObjectHideFlags: 0

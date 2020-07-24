@@ -136,14 +136,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6914156307125093466}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff594d6c4f96bd04b9d6ab3aa7ad07ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 95f045224b80bb14aa76053ef208a579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 3011079257921878861}
   enemyPrefab: {fileID: 5818782381066743334, guid: cc61bc451e0ff1648991709703c4e7d4,
     type: 3}
   isActive: 1
-  spawnDelay: 2
+  spawnDelay: 1.5
 --- !u!1 &6924295849855180977
 GameObject:
   m_ObjectHideFlags: 0
