@@ -43,9 +43,10 @@ public class WeaponModifier : MonoBehaviour
 
             else if (modifierType == ModifierType.Temperature)
             {
+                
                 float scale = modifierValue * modifierScale;
-                projectile.temperature = scale;
-                projectile.UpdateThermal();
+                projectile.thermals.Temperature = scale;
+                projectile.UpdateThermalApperance();
             }
         }
     }

@@ -12,6 +12,15 @@ public class WeaponModifierManager : MonoBehaviour
 
     private string modscroll = "Mouse ScrollWheel";
 
+    private void Start()
+    {
+        // hit update once each on start to set up display vals
+        foreach (WeaponModifier mod in GetWeaponModifiers())
+        {
+            UpdateModifier(0, mod);
+        }
+    }
+
     // called on start by WeaponModifier
     public void RegisterModifier(WeaponModifier modifier)
     {

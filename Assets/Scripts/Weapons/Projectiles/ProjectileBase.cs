@@ -14,14 +14,7 @@ public abstract class ProjectileBase : MonoBehaviour
     [Tooltip("Density * Size = mass")]
     public float density;
 
-    [Tooltip("Temperature at which projectile catches fire")]
-    public float ignitionTemperature;
-
-    [Tooltip("Inactive projectiles can't collide or be rendered")]
-    public bool isActive = false;
-
     public float shootForce;
-    public float temperature;
 
     //public LayerMask layerMask = -1;
 
@@ -29,6 +22,7 @@ public abstract class ProjectileBase : MonoBehaviour
     public Vector3 initialDirection { get; protected set; }
     protected Rigidbody rigidBody;
     protected Renderer rend;
+    public ThermalBody thermals;
 
     protected Vector3 lastPosition;
     protected float radius;
@@ -36,7 +30,8 @@ public abstract class ProjectileBase : MonoBehaviour
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
     public abstract void UpdateMass();
-    public abstract void UpdateThermal();
+
+    public abstract void UpdateThermalApperance();
 
     public abstract float GetMassFromSize();
     public abstract float GetDamage(Collision coll);
@@ -45,12 +40,12 @@ public abstract class ProjectileBase : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody>();
         rend = this.GetComponentInChildren<Renderer>();        
+        thermals = GetComponent<ThermalBody>();
     }
 
     protected void FixedUpdate()
     {
-        // appearance first to prevent flashing?
-        UpdateThermal();
+        UpdateThermalApperance();
 
         // physics updates must come before applys
         UpdateMass();      

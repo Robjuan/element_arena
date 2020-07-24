@@ -46,8 +46,11 @@ public class Health : MonoBehaviour
     private void HandleDeath()
     {
         if (currentHealth <= 0f && !isDead)
-        {       
-            GameEvents.current.ActorDeath(this.gameObject);           
+        {   
+            if (this.gameObject)
+            {
+                GameEvents.current.ActorDeath(this.gameObject);
+            }
             isDead = true;
             parent.IsAlive = false;
         }

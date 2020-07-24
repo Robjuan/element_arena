@@ -22,12 +22,8 @@ public class EnemyController : MonoBehaviour
 
     void Die(GameObject deadActor)
     {
-        Debug.Log("da id :" + deadActor.GetInstanceID() + " local : " + GetInstanceID());
-
-        // todo: check null here, also why are nulls getting sent
-        if (deadActor == this.gameObject)
+        if (IsAlive && deadActor == this.gameObject)
         {
-            Debug.Log("Destroying " + deadActor);
             IsAlive = false;
             Destroy(deadActor, 2f);
         }

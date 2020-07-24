@@ -10,7 +10,9 @@ public class EarthProjectile : ProjectileBase
         //Debug.Log("mass = " + rigidBody.mass + ", temp = " + temperature + ", v = " + rigidBody.velocity.magnitude);
         //  dot product of collision normal and collision velocity (ie the velocity of the two bodies relative to each other), times the mass of the other collider 
         //return Vector3.Dot(coll.relativeVelocity, )
-        return rigidBody.mass * temperature * rigidBody.velocity.magnitude;
+        var cp = coll.GetContact(0);
+        //cp.normal * 
+        return rigidBody.mass * thermals.Temperature * rigidBody.velocity.magnitude;
     }
 
     public override float GetMassFromSize()
@@ -39,15 +41,15 @@ public class EarthProjectile : ProjectileBase
         
     }
 
-    public override void UpdateThermal()
+    public override void UpdateThermalApperance()
     {
         // TODO : an effect i'm actually excited about
         
         // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
         float temp_max = 40f;
         float temp_min = 5f;
-        
-        float scaled = ((this.temperature - temp_min) / (temp_max - temp_min));
+
+        float scaled = ((thermals.Temperature - temp_min) / (temp_max - temp_min));
 
         // this brown is very light - how to do dark rocks
         Color brown = new Color(0.1f,0.02f,0f,1f);

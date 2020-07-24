@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifierName: Temperature
   modifierType: 3
-  modifierValue: 0
+  modifierValue: 10
   modifierScale: 1
   modifierActive: 1
   modifierButton: Modifier 3
