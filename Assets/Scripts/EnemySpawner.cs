@@ -14,6 +14,8 @@ public class EnemySpawner : MonoBehaviour
     private float lastSpawn = Mathf.NegativeInfinity;
     private GameObject player;
     private int spawnedCount = 0;
+
+    private List<EnemyController> spawnedEnemies = new List<EnemyController>();
     
 
     void Start()
@@ -24,10 +26,30 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        // if the spawner is exhausted
         if (spawnedCount >= totalToSpawn)
         {
-            GameEvents.current.SpawnerEmpty(gameObject);
+            // stop spawning
             isActive = false;
+
+            var allDead = true;
+            // check that every enemy we spawned is dead
+            foreach(EnemyController enemy in spawnedEnemies)
+            {
+                // if any is alive, then not all are dead
+                if (enemy)
+                {
+                    allDead = false;
+                    break;
+                }
+            }
+
+            // if we're exhausted and every enemy is dead, spawner is empty.
+            // todo: consider separating this.
+            if (allDead)
+            {
+                GameEvents.current.SpawnerEmpty(gameObject);
+            }
         }
 
         if (isActive && ((lastSpawn + spawnDelay) < Time.time))
@@ -36,6 +58,7 @@ public class EnemySpawner : MonoBehaviour
             newEnemy.SetWalkTarget(player.transform);
             lastSpawn = Time.time;
             spawnedCount += 1;
+            spawnedEnemies.Add(newEnemy);
         }   
     }
 }
