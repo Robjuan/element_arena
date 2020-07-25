@@ -47,9 +47,9 @@ public class Health : MonoBehaviour
     {
         if (currentHealth <= 0f && !isDead)
         {   
-            if (this.gameObject)
+            if (this.gameObject && parent)
             {
-                GameEvents.current.ActorDeath(this.gameObject);
+                parent.Die();
             }
             isDead = true;
             parent.IsAlive = false;

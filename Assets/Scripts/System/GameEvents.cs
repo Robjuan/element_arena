@@ -47,5 +47,14 @@ public class GameEvents : MonoBehaviour
         {
             onActorDeath(actor);
         }
-    } 
+    }
+
+    public event Action<GameObject> onSpawnerEmpty;
+    public void SpawnerEmpty(GameObject spawner)
+    {
+        if (onSpawnerEmpty != null)
+        {
+            onSpawnerEmpty(spawner);
+        }
+    }
 }

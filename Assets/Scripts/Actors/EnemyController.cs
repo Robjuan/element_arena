@@ -11,7 +11,6 @@ public class EnemyController : MonoBehaviour
 
     private void Start() 
     {
-        GameEvents.current.onActorDeath += Die;
         IsAlive = true;
     }
 
@@ -20,12 +19,12 @@ public class EnemyController : MonoBehaviour
         this.walkTarget = wt;
     }
 
-    void Die(GameObject deadActor)
+    public void Die()
     {
-        if (IsAlive && deadActor == this.gameObject)
+        if (IsAlive && this.gameObject)
         {
             IsAlive = false;
-            Destroy(deadActor, 2f);
+            Destroy(this.gameObject, 2f);
         }
 
     }

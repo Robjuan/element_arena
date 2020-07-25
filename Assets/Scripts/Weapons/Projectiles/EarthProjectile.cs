@@ -8,11 +8,13 @@ public class EarthProjectile : ProjectileBase
     public override float GetDamage(Collision coll)
     {
         //Debug.Log("mass = " + rigidBody.mass + ", temp = " + temperature + ", v = " + rigidBody.velocity.magnitude);
-        //  dot product of collision normal and collision velocity (ie the velocity of the two bodies relative to each other), times the mass of the other collider 
+        //  dot product of collision normal and collision velocity,  times the mass of the other collider 
         //return Vector3.Dot(coll.relativeVelocity, )
         var cp = coll.GetContact(0);
-        //cp.normal * 
-        return rigidBody.mass * thermals.Temperature * rigidBody.velocity.magnitude;
+        var collEnergy = Vector3.Dot(cp.normal,coll.relativeVelocity);
+        Debug.Log("collenergy: "+collEnergy);
+        //return rigidBody.mass * thermals.Temperature * rigidBody.velocity.magnitude;
+        return collEnergy * thermals.Temperature;
     }
 
     public override float GetMassFromSize()
