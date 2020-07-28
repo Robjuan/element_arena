@@ -23,9 +23,12 @@ public abstract class ProjectileBase : MonoBehaviour
     protected Rigidbody rigidBody;
     protected Renderer rend;
     public ThermalBody thermals;
+    protected SphereCollider thisColl;
 
     protected Vector3 lastPosition;
     protected float radius;
+
+    protected GameObject innerSphere;
 
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
@@ -38,20 +41,38 @@ public abstract class ProjectileBase : MonoBehaviour
 
     protected void Awake()
     {
-        rigidBody = GetComponent<Rigidbody>();
+        rigidBody = GetComponentInChildren<Rigidbody>();
         rend = this.GetComponentInChildren<Renderer>();        
-        thermals = GetComponent<ThermalBody>();
+        thermals = GetComponentInChildren<ThermalBody>();
+        thisColl = GetComponentInChildren<SphereCollider>();
+
+        foreach (Transform child in gameObject.transform)
+        {
+            if (child.tag == "Projectile_InnerSphere")
+            {
+                innerSphere = child.gameObject;
+            }
+        }
     }
 
     protected void FixedUpdate()
     {
-        UpdateThermalApperance();
-
         // physics updates must come before applys
         UpdateMass();      
 
         ApplyGravity();
         ApplyDrag();
+    }
+
+    protected void Update()
+    {
+        UpdateThermalApperance();
+    }
+
+    public float GetRadius()
+    {
+        var scale = gameObject.transform.localScale.x; // sphere should be the same in all direction
+        return thisColl.radius * scale; // multiply collider radius by localscale
     }
 
     protected void OnCollisionEnter(Collision coll)

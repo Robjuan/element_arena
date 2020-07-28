@@ -1,20 +1,25 @@
 using UnityEngine;
 using System;
+using UnityEditor.Animations;
+using UnityEngine.UIElements;
 
 public class EarthProjectile : ProjectileBase
 {
     private Vector3 lastLocalScale;
+    private float lastTemp;
 
+    // palette: https://www.color-hex.com/color-palette/3392
+    public Color underlay_MaxTemp = new Color32(255, 102, 0, 255);
+    public Color underlay_MinTemp = new Color32(85, 51, 51, 255);
+          
     public override float GetDamage(Collision coll)
     {
         //Debug.Log("mass = " + rigidBody.mass + ", temp = " + temperature + ", v = " + rigidBody.velocity.magnitude);
         //  dot product of collision normal and collision velocity,  times the mass of the other collider 
-        //return Vector3.Dot(coll.relativeVelocity, )
+
         var cp = coll.GetContact(0);
         var collEnergy = Vector3.Dot(cp.normal,coll.relativeVelocity);
-        Debug.Log("collenergy: "+collEnergy);
-        //return rigidBody.mass * thermals.Temperature * rigidBody.velocity.magnitude;
-        return collEnergy * thermals.Temperature;
+        return collEnergy * rigidBody.mass * thermals.Temperature;
     }
 
     public override float GetMassFromSize()
@@ -25,8 +30,10 @@ public class EarthProjectile : ProjectileBase
         // mass should not decrease too fast at low numbers (miniscule lazer projectiles are bad (no visual feedback, hard physics))
         // mass should not get out of hand at large sizes (giant immovable boulders are bad (niche use case - doable at max size))
         // mass should otherwise smoothly increase 
-        var radius = rend.bounds.extents.magnitude;
-        var volume = Math.Pow(radius,2); // r^3 is real world, r^2 is much less punishing for giant rocks
+
+        // with new, accurate radius, mass is increasing not that fast tbh
+
+        var volume = Math.Pow(this.GetRadius(),3); // r^3 is real world, r^2 is much less punishing for giant rocks
         var retval = (float)volume * density;
         return retval;
     }
@@ -40,24 +47,36 @@ public class EarthProjectile : ProjectileBase
         }
 
         lastLocalScale = rigidBody.transform.localScale;
-        
     }
 
     public override void UpdateThermalApperance()
     {
-        // TODO : an effect i'm actually excited about
-        
+      
+        // todo: store these vars in a better place
         // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
-        float temp_max = 40f;
-        float temp_min = 5f;
 
-        float scaled = ((thermals.Temperature - temp_min) / (temp_max - temp_min));
+        if (lastTemp!= thermals.Temperature)
+        {
+            
+            float temp_max = 40f;
+            float temp_min = 5f;
 
-        // this brown is very light - how to do dark rocks
-        Color brown = new Color(0.1f,0.02f,0f,1f);
-        Color orange = new Color(1.1f,0.60f,0.06f,1f);
+            // innersphere radius numbers // revisit these numbers with the new projectile
+            float inner_max = 1.683f;
+            float inner_min = 0.795f;
 
-        rend.material.color = Color.Lerp(brown, orange,scaled);
+            
+            float scaled = (inner_max - inner_min) * ((thermals.Temperature - temp_min) / (temp_max - temp_min)) + inner_min;
+            //Debug.Log(innerSphere.transform.localScale);
+            //Debug.Log(scaled);
+
+            innerSphere.transform.localScale = new Vector3(scaled, scaled, scaled);
+
+            // todo: shift the colour of both lava & rock
+            //rend.material.color = Color.Lerp(underlay_MaxTemp, underlay_MinTemp, scaled);
+
+            lastTemp = thermals.Temperature;
+        }
     }
 
 

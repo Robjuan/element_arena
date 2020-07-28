@@ -46,13 +46,19 @@ public class Health : MonoBehaviour
     private void HandleDeath()
     {
         if (currentHealth <= 0f && !isDead)
-        {   
-            if (this.gameObject && parent)
+        {
+            // parent is EnemyController if exists
+            if (parent)
             {
                 parent.Die();
+                parent.IsAlive = false;
+            }
+
+            if (this.gameObject)
+            {
+                GameEvents.current.ActorDeath(this.gameObject);
             }
             isDead = true;
-            parent.IsAlive = false;
         }
     }
 }

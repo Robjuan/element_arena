@@ -28,6 +28,8 @@ public class WeaponController : MonoBehaviour
     [Tooltip("Delay between fires")]
     public float shotDelay;
 
+    public GameObject player;
+
     // last value trackers
     // > outputs
     private Dictionary<OutputType, float> lastValues;
@@ -45,6 +47,8 @@ public class WeaponController : MonoBehaviour
         // but we often need to know if the modifier has changed also to check whether or not to re-calc
         // TODO: put those modifier trackers in a nice dictionary
         lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().Where(w => w != OutputType.None).ToDictionary(v => v, v => 0.0f);
+        // todo: better?
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Update()
@@ -69,13 +73,13 @@ public class WeaponController : MonoBehaviour
                     last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
                 }
 
-                if (ot == OutputType.Mass)// && lastValues[ot] != newest_mass)
+                if ((ot == OutputType.Mass) && lastValues[ot] != newest_mass)
                 {
                     GameEvents.current.OutputChange(newest_mass, OutputType.Mass);
                     lastValues[ot] = newest_mass;
                     //continue;
                 }            
-                else if (ot == OutputType.InitialVelocity)// && lastValues[ot] != newest_mass)
+                else if ((ot == OutputType.InitialVelocity) && lastValues[ot] != newest_mass)
                 {
                     // consider tracking forcemod changes like sizemod
                     var forceMod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Force);
@@ -105,8 +109,16 @@ public class WeaponController : MonoBehaviour
     {
         if ((m_LastTimeShot + shotDelay) < Time.time)
         {
-            Vector3 shotDirection = GetShotDirection(); 
-            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, projectileSpawnPoint.position, Quaternion.LookRotation(shotDirection));
+            // todo: take these maths out so we're not doubling projectiles
+            // todo: some raycasting to check the furthest away we can spawn without spawning on the other side of something
+            var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
+            var projRadius = testProj.GetRadius();
+            Destroy(testProj.gameObject);
+
+            Vector3 adjustedSpawnPoint = player.transform.position + GetShotDirection() * projRadius*2; 
+            
+            Vector3 shotDirection = GetShotDirection();             
+            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, adjustedSpawnPoint, Quaternion.LookRotation(shotDirection));
             newproj.Shoot(shotDirection);
             m_LastTimeShot = Time.time;
         }
