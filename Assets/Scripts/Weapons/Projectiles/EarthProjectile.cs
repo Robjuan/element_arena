@@ -9,9 +9,11 @@ public class EarthProjectile : ProjectileBase
     private float lastTemp;
 
     // palette: https://www.color-hex.com/color-palette/3392
-    public Color underlay_MaxTemp = new Color32(255, 102, 0, 255);
-    public Color underlay_MinTemp = new Color32(85, 51, 51, 255);
-          
+    //public Color underlay_MaxTemp = new Color32(255, 102, 0, 255);
+    //public Color underlay_MinTemp = new Color32(85, 51, 51, 255);
+    
+    public Color ignitionColor = new Color32(191, 18, 0, 255);
+
     public override float GetDamage(Collision coll)
     {
         //Debug.Log("mass = " + rigidBody.mass + ", temp = " + temperature + ", v = " + rigidBody.velocity.magnitude);
@@ -49,6 +51,11 @@ public class EarthProjectile : ProjectileBase
         lastLocalScale = rigidBody.transform.localScale;
     }
 
+    private float ScaleToRange(float x, float existing_max, float existing_min, float target_max, float target_min)
+    {
+        return (target_max - target_min) * ((x - existing_min) / (existing_max - existing_min)) + target_min;
+    }
+
     public override void UpdateThermalApperance()
     {
 
@@ -57,19 +64,37 @@ public class EarthProjectile : ProjectileBase
 
             // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
             float temp_max = 35f;
-            float temp_min = 1f;
+            float temp_min = 10f;
 
             // innersphere radius numbers 
             // these are set based on the prefab and what localscale vars look good
             float inner_max = 1.1f;
             float inner_min = 1.0f;
-            
-            
-            float scaled = (inner_max - inner_min) * ((thermals.Temperature - temp_min) / (temp_max - temp_min)) + inner_min;
+
+
+            float scaled = ScaleToRange(thermals.Temperature, temp_max, temp_min, inner_max, inner_min);
             innerSphere.transform.localScale = new Vector3(scaled, scaled, scaled);
 
-            // todo: shift the colour of both lava & rock
-            //rend.material.color = Color.Lerp(underlay_MaxTemp, underlay_MinTemp, scaled);
+            // only start glowing when we get hot
+            if (thermals.isIgnited())
+            {
+                // these are inspector values but don't match the actual color values
+                //float emission_min = 7.3f;
+                //float emission_max = 10f;
+
+                float emission_min = 1f;
+                float emission_max = 500f;
+
+                float intensity = ScaleToRange(thermals.Temperature, temp_max, temp_min, emission_max, emission_min);
+                               
+                innerSphereRend.material.EnableKeyword("_EMISSION");
+                innerSphereRend.material.SetColor("_EmissionColor", ignitionColor * intensity);
+
+            }
+            else // turn off glowing if temp drops below ignition
+            {
+                innerSphereRend.material.DisableKeyword("_EMISSION");
+            }
 
             lastTemp = thermals.Temperature;
         }

@@ -6,8 +6,6 @@ public class ThermalBody : MonoBehaviour
 {
 
     public float initialTemperature;
-
-   [Tooltip("Temperature at which projectile catches fire")]
     public float ignitionTemperature;
 
     public float Temperature { get; set; }
@@ -17,4 +15,8 @@ public class ThermalBody : MonoBehaviour
         Temperature = initialTemperature;
     }
 
+    public bool isIgnited()
+    {
+        return Temperature >= ignitionTemperature;
+    }
 }

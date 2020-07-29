@@ -132,8 +132,7 @@ MonoBehaviour:
   density: 30
   shootForce: 10
   thermals: {fileID: 6190141328102635077}
-  underlay_MaxTemp: {r: 1, g: 0.4, b: 0, a: 1}
-  underlay_MinTemp: {r: 0.33333334, g: 0.2, b: 0.2, a: 1}
+  ignitionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &6190141328102635077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialTemperature: 10
-  ignitionTemperature: 0
+  ignitionTemperature: 20
 --- !u!54 &1233436076184635504
 Rigidbody:
   m_ObjectHideFlags: 0

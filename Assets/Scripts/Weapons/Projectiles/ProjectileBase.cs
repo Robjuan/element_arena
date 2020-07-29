@@ -21,7 +21,7 @@ public abstract class ProjectileBase : MonoBehaviour
     public Vector3 initialPosition { get; protected set; }
     public Vector3 initialDirection { get; protected set; }
     protected Rigidbody rigidBody;
-    protected Renderer rend;
+    protected Renderer innerSphereRend;
     public ThermalBody thermals;
     protected SphereCollider thisColl;
 
@@ -42,7 +42,6 @@ public abstract class ProjectileBase : MonoBehaviour
     protected void Awake()
     {
         rigidBody = GetComponentInChildren<Rigidbody>();
-        rend = this.GetComponentInChildren<Renderer>();        
         thermals = GetComponentInChildren<ThermalBody>();
         thisColl = GetComponentInChildren<SphereCollider>();
 
@@ -51,6 +50,7 @@ public abstract class ProjectileBase : MonoBehaviour
             if (child.tag == "Projectile_InnerSphere")
             {
                 innerSphere = child.gameObject;
+                innerSphereRend = child.GetComponent<Renderer>();
                 break;
             }
         }
