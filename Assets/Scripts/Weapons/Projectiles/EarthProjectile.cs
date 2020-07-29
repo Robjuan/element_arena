@@ -51,25 +51,21 @@ public class EarthProjectile : ProjectileBase
 
     public override void UpdateThermalApperance()
     {
-      
-        // todo: store these vars in a better place
-        // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
 
         if (lastTemp!= thermals.Temperature)
         {
+
+            // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
+            float temp_max = 35f;
+            float temp_min = 1f;
+
+            // innersphere radius numbers 
+            // these are set based on the prefab and what localscale vars look good
+            float inner_max = 1.1f;
+            float inner_min = 1.0f;
             
-            float temp_max = 40f;
-            float temp_min = 5f;
-
-            // innersphere radius numbers // revisit these numbers with the new projectile
-            float inner_max = 1.683f;
-            float inner_min = 0.795f;
-
             
             float scaled = (inner_max - inner_min) * ((thermals.Temperature - temp_min) / (temp_max - temp_min)) + inner_min;
-            //Debug.Log(innerSphere.transform.localScale);
-            //Debug.Log(scaled);
-
             innerSphere.transform.localScale = new Vector3(scaled, scaled, scaled);
 
             // todo: shift the colour of both lava & rock

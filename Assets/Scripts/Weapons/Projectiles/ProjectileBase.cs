@@ -51,6 +51,7 @@ public abstract class ProjectileBase : MonoBehaviour
             if (child.tag == "Projectile_InnerSphere")
             {
                 innerSphere = child.gameObject;
+                break;
             }
         }
     }
