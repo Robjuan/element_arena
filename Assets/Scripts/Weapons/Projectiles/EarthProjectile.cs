@@ -64,7 +64,7 @@ public class EarthProjectile : ProjectileBase
 
             // the actual range is set by the weapon, but setting the range here means that the colour won't change outside these values.
             float temp_max = 35f;
-            float temp_min = 10f;
+            float temp_min = 8f;
 
             // innersphere radius numbers 
             // these are set based on the prefab and what localscale vars look good

@@ -75,9 +75,9 @@ public class WeaponController : MonoBehaviour
 
                 if ((ot == OutputType.Mass) && lastValues[ot] != newest_mass)
                 {
-                    GameEvents.current.OutputChange(newest_mass, OutputType.Mass);
+                    GameEvents.current.MassChange(Mathf.Round(newest_mass));
                     lastValues[ot] = newest_mass;
-                    //continue;
+                    continue;
                 }            
                 else if ((ot == OutputType.InitialVelocity) && lastValues[ot] != newest_mass)
                 {
@@ -85,15 +85,15 @@ public class WeaponController : MonoBehaviour
                     var forceMod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Force);
                     var shootforce = forceMod.modifierValue * forceMod.modifierScale;
                     float v = (shootforce/newest_mass)*Time.fixedDeltaTime;
-                    GameEvents.current.OutputChange((v * 100), OutputType.InitialVelocity); // scale it up for display
+                    GameEvents.current.InitVelocChange(Mathf.Round((v * 100))); // scale it up for display
                     lastValues[ot] = v;
-                    //continue; // redundant as last option
+                    continue; // redundant as last option
                 }
                 
             }
             else if (ot == OutputType.Density)
             {
-                GameEvents.current.OutputChange(projectilePrefab.density,OutputType.Density);
+                //Debug.Log(projectilePrefab.density);
             }
         }
     }
@@ -127,6 +127,7 @@ public class WeaponController : MonoBehaviour
     private Vector3 GetShotDirection()
     {
         // specifically aim towards the crosshair
+        // todo: give a slight upwards tilt
         return Camera.main.transform.forward;
     }
 }

@@ -13,30 +13,74 @@ public class GameEvents : MonoBehaviour
        current = this;
     }
 
-    public event Action<float, WeaponModifier.ModifierType> onModifierChange;
-    public void ModifierChange(float newVal, WeaponModifier.ModifierType modType)
+    public event Action<WeaponController> onWeaponChange;
+    public void WeaponChange(WeaponController newActiveWeapon)
     {
-        if (onModifierChange != null)
+        if (onWeaponChange != null)
         {
-            onModifierChange(newVal, modType);
+            onWeaponChange(newActiveWeapon);
         }
-    }    
+    }
 
-    public event Action<float, WeaponController.OutputType> onOutputChange;
-    public void OutputChange(float newVal, WeaponController.OutputType outType)
+    #region modifier change events
+
+    public event Action<float> onSizeModChange;
+    public void SizeModChange(float newVal)
     {
-        if (onOutputChange != null)
+        if (onSizeModChange != null)
         {
-            onOutputChange(newVal, outType);
+            onSizeModChange(newVal);
         }
-    }    
+    }
 
-    public event Action<float, Number_UIDisplay.DisplayTarget> onHealthChange;
-    public void HealthChange(float newVal, Number_UIDisplay.DisplayTarget displayTarget)
+    public event Action<float> onForceModChange;
+    public void ForceModChange(float newVal)
+    {
+        if (onForceModChange != null)
+        {
+            onForceModChange(newVal);
+        }
+    }
+
+    public event Action<float> onTempModChange;
+    public void TempModChange(float newVal)
+    {
+        if (onTempModChange != null)
+        {
+            onTempModChange(newVal);
+        }
+    }
+
+    #endregion
+
+    #region output change events
+
+    public event Action<float> onInitVelocChange;
+    public void InitVelocChange(float newVal)
+    {
+        if (onInitVelocChange != null)
+        {
+            onInitVelocChange(newVal);
+        }
+    }
+
+    public event Action<float> onMassChange;
+    public void MassChange(float newVal)
+    {
+        if (onMassChange != null)
+        {
+            onMassChange(newVal);
+        }
+    }
+
+    #endregion
+
+    public event Action<float> onHealthChange;
+    public void HealthChange(float newVal)
     {
         if (onHealthChange != null)
         {
-            onHealthChange(newVal, displayTarget);
+            onHealthChange(newVal);
         }
     } 
 

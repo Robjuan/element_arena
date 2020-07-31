@@ -168,7 +168,7 @@ MonoBehaviour:
   - {fileID: 7757273499799772890}
   - {fileID: 5940210387261370873}
   - {fileID: 2822429469840747264}
-  m_PointsAvailable: 50
+  m_PointsAvailable: 20
 --- !u!114 &7757273499799772890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,8 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifierName: Size
   modifierType: 1
-  modifierValue: 10
-  modifierScale: 0.2
+  modifierValue: 2
+  modifierScale: 0.4
   modifierActive: 1
   modifierButton: Modifier 1
 --- !u!114 &5940210387261370873
@@ -201,8 +201,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifierName: Force
   modifierType: 2
-  modifierValue: 10
-  modifierScale: 100
+  modifierValue: 2
+  modifierScale: 200
   modifierActive: 1
   modifierButton: Modifier 2
 --- !u!114 &2822429469840747264
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifierName: Temperature
   modifierType: 3
-  modifierValue: 10
-  modifierScale: 1
+  modifierValue: 2
+  modifierScale: 2
   modifierActive: 1
   modifierButton: Modifier 3

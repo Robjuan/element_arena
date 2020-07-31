@@ -84,10 +84,19 @@ public class WeaponModifierManager : MonoBehaviour
         if(CanUpdateModifier(delta, mod))
         {
             mod.modifierValue += delta;
-            GameEvents.current.ModifierChange(mod.modifierValue, mod.modifierType);
-            // highlight in green
+            switch(mod.modifierType)
+            {
+                case WeaponModifier.ModifierType.Force:
+                    GameEvents.current.ForceModChange(mod.modifierValue);
+                    break;
+                case WeaponModifier.ModifierType.Size:
+                    GameEvents.current.SizeModChange(mod.modifierValue);
+                    break;
+                case WeaponModifier.ModifierType.Temperature:
+                    GameEvents.current.TempModChange(mod.modifierValue);
+                    break;
+            }   
         }
-        // highlight in red
     }
 
     public int GetModifyInput()

@@ -31,7 +31,7 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
         if (this.gameObject.tag == "Player"){
-            GameEvents.current.HealthChange(currentHealth, Number_UIDisplay.DisplayTarget.Health);
+            GameEvents.current.HealthChange(currentHealth);
         }
 
         HandleDeath();
