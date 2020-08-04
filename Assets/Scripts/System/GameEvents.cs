@@ -64,6 +64,15 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action<float> onManaCostChange;
+    public void ManaCostChange(float newVal)
+    {
+        if (onManaCostChange != null)
+        {
+            onManaCostChange(newVal);
+        }
+    }
+
     public event Action<float> onInitVelocChange;
     public void InitVelocChange(float newVal)
     {

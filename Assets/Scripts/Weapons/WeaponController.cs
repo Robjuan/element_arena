@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.InteropServices;
 
 public class WeaponController : MonoBehaviour
 {
@@ -28,6 +30,21 @@ public class WeaponController : MonoBehaviour
     [Tooltip("Delay between fires")]
     public float shotDelay;
 
+    [Tooltip("max mana")]
+    public float maxMana;
+    private float currentMana;
+
+    [Tooltip("scales the cost of casting")]
+    public float manaScale;
+    private float currentManaCost;
+    private float lastManaCost;
+
+    [Tooltip("mana regen per tick")]
+    public float manaRegen;
+    [Tooltip("time per tick")]
+    public float manaRegenDelay;
+    private float lastManaRegenTime = Mathf.NegativeInfinity;
+
     public GameObject player;
 
     // last value trackers
@@ -49,11 +66,29 @@ public class WeaponController : MonoBehaviour
         lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().Where(w => w != OutputType.None).ToDictionary(v => v, v => 0.0f);
         // todo: better?
         player = GameObject.FindWithTag("Player");
+
+        currentMana = maxMana;
+        GameEvents.current.onForceModChange += UpdateCurrentManacost;
+        GameEvents.current.onSizeModChange += UpdateCurrentManacost;
+        GameEvents.current.onTempModChange += UpdateCurrentManacost;
     }
 
     private void Update()
     {
         checkOutputs();
+        RegenMana();
+
+    }
+
+    private void RegenMana()
+    {
+        // per second ticking
+        if ((lastManaRegenTime + manaRegenDelay) < Time.time)
+        {
+            currentMana += manaRegen;
+            GameEvents.current.ManaChange(currentMana);
+            lastManaRegenTime = Time.time;
+        }
     }
 
     public void checkOutputs()
@@ -87,7 +122,7 @@ public class WeaponController : MonoBehaviour
                     float v = (shootforce/newest_mass)*Time.fixedDeltaTime;
                     GameEvents.current.InitVelocChange(Mathf.Round((v * 100))); // scale it up for display
                     lastValues[ot] = v;
-                    continue; // redundant as last option
+                    continue;
                 }
                 
             }
@@ -105,9 +140,45 @@ public class WeaponController : MonoBehaviour
         return newProjectile;
     }
 
+    public void UpdateCurrentManacost(float newModVal)
+    {
+        var manacost = 0f;
+        foreach (WeaponModifier mod in weaponModifierManager.GetWeaponModifiers())
+        {
+            manacost += mod.modifierValue;
+        }
+        currentManaCost = manacost * manaScale;
+
+        if (currentManaCost != lastManaCost)
+        {
+            GameEvents.current.ManaCostChange(currentManaCost);
+            lastManaCost = currentManaCost;
+        }
+    }
+
+    private bool CanShoot()
+    {
+        bool firerate = false;
+        bool manacost = false;
+
+        // fire rate
+        if ((m_LastTimeShot + shotDelay) < Time.time)
+        {
+            firerate = true;
+        }
+        
+        // manacost
+        if (currentMana > currentManaCost)
+        {
+            manacost = true;
+        }
+
+        return firerate && manacost;
+    }
+
     public void HandleShoot()
     {
-        if ((m_LastTimeShot + shotDelay) < Time.time)
+        if (CanShoot())
         {
             // todo: take these maths out so we're not doubling projectiles
             // todo: some raycasting to check the furthest away we can spawn without spawning on the other side of something
@@ -121,6 +192,9 @@ public class WeaponController : MonoBehaviour
             var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, adjustedSpawnPoint, Quaternion.LookRotation(shotDirection));
             newproj.Shoot(shotDirection);
             m_LastTimeShot = Time.time;
+
+            currentMana -= currentManaCost;
+            GameEvents.current.ManaChange(currentMana);
         }
     }
 
