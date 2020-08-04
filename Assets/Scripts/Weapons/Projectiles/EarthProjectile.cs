@@ -51,11 +51,6 @@ public class EarthProjectile : ProjectileBase
         lastLocalScale = rigidBody.transform.localScale;
     }
 
-    private float ScaleToRange(float x, float existing_max, float existing_min, float target_max, float target_min)
-    {
-        return (target_max - target_min) * ((x - existing_min) / (existing_max - existing_min)) + target_min;
-    }
-
     public override void UpdateThermalApperance()
     {
 
@@ -72,7 +67,7 @@ public class EarthProjectile : ProjectileBase
             float inner_min = 1.0f;
 
 
-            float scaled = ScaleToRange(thermals.Temperature, temp_max, temp_min, inner_max, inner_min);
+            float scaled =  HelperFunctions.ScaleToRange(thermals.Temperature, temp_max, temp_min, inner_max, inner_min);
             innerSphere.transform.localScale = new Vector3(scaled, scaled, scaled);
 
             // only start glowing when we get hot
@@ -85,7 +80,7 @@ public class EarthProjectile : ProjectileBase
                 float emission_min = 1f;
                 float emission_max = 500f;
 
-                float intensity = ScaleToRange(thermals.Temperature, temp_max, temp_min, emission_max, emission_min);
+                float intensity = HelperFunctions.ScaleToRange(thermals.Temperature, temp_max, temp_min, emission_max, emission_min);
                                
                 innerSphereRend.material.EnableKeyword("_EMISSION");
                 innerSphereRend.material.SetColor("_EmissionColor", ignitionColor * intensity);

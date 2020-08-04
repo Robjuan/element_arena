@@ -16,7 +16,7 @@ public class WeaponModifier : MonoBehaviour
     [Tooltip("Modifier Type")]
     public ModifierType modifierType; 
     [Tooltip("Modifier Value")]
-    public float modifierValue;
+    public int modifierValue;
     [Tooltip("Modifier Scale")]
     public float modifierScale;
     [Tooltip("Modifier Enabled")]

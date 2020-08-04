@@ -17,14 +17,14 @@ public class PlayerWeaponsManager : MonoBehaviour
 
     private void Start()
     {
-        activeWeaponIndex = 0;
         foreach (var weapon in startingWeapons)
         {
             AddWeapon(weapon);
-        } 
-
+        }
+        SetActiveWeaponSlot(0);
     }
 
+    
     // Adds a weapon to our inventory
     public bool AddWeapon(WeaponController weaponPrefab)
     {

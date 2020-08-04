@@ -55,6 +55,15 @@ public class GameEvents : MonoBehaviour
 
     #region output change events
 
+    public event Action<float> onManaChange;
+    public void ManaChange(float newVal)
+    {
+        if (onManaChange != null)
+        {
+            onManaChange(newVal);
+        }
+    }
+
     public event Action<float> onInitVelocChange;
     public void InitVelocChange(float newVal)
     {
@@ -70,6 +79,19 @@ public class GameEvents : MonoBehaviour
         if (onMassChange != null)
         {
             onMassChange(newVal);
+        }
+    }
+
+    #endregion
+
+    #region UI intra-events
+
+    public event Action onGaugeInnerUpdate;
+    public void GaugeInnerUpdate()
+    {
+        if (onGaugeInnerUpdate != null)
+        {
+            onGaugeInnerUpdate();
         }
     }
 

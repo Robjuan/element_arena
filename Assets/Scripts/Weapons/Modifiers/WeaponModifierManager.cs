@@ -44,6 +44,16 @@ public class WeaponModifierManager : MonoBehaviour
         return l_modifiers;
     }
 
+    public int GetCurrentUsedPoints()
+    {
+        var total = 0;
+        foreach(WeaponModifier mod in GetWeaponModifiers())
+        {
+            total += (int)mod.modifierValue;
+        }
+        return total;
+    }
+
     public void ApplyModifiers(ProjectileBase projectile)
     {
         foreach (var mod in GetWeaponModifiers())
@@ -53,7 +63,7 @@ public class WeaponModifierManager : MonoBehaviour
         
     }
 
-    public bool CanUpdateModifier(float delta, WeaponModifier mod)
+    public bool CanUpdateModifier(int delta, WeaponModifier mod)
     {
         var goalValue = mod.modifierValue + delta;
         if (goalValue < 1 || goalValue > m_PointsAvailable)
@@ -67,7 +77,7 @@ public class WeaponModifierManager : MonoBehaviour
         var current_sum = 0;
         for (int i = 0; i < mods.Count; i++)
         {
-            current_sum += (int)Math.Round(mods[i].modifierValue);
+            current_sum += mods[i].modifierValue;
         }
 
         if ((current_sum+delta) > m_PointsAvailable)  
@@ -79,7 +89,7 @@ public class WeaponModifierManager : MonoBehaviour
         return true;
     }
 
-    public void UpdateModifier(float delta, WeaponModifier mod)
+    public void UpdateModifier(int delta, WeaponModifier mod)
     {
         if(CanUpdateModifier(delta, mod))
         {
@@ -112,7 +122,7 @@ public class WeaponModifierManager : MonoBehaviour
         return -1;
     }
 
-    public float GetModifyScrollInput()
+    public int GetModifyScrollInput()
     {
         if (Input.GetAxis(modscroll) < 0f)
         {
@@ -130,11 +140,12 @@ public class WeaponModifierManager : MonoBehaviour
         var modInput = GetModifyInput();
         if (modInput > -1)
         {
-            var modAmount = GetModifyScrollInput();
-            var mods = GetWeaponModifiers();
-
-            UpdateModifier(modAmount, mods[modInput]);
-            
+            var modDirection = GetModifyScrollInput();
+            if (modDirection != 0)
+            {
+                var mods = GetWeaponModifiers();
+                UpdateModifier(modDirection, mods[modInput]);
+            }
         }
     }
 
