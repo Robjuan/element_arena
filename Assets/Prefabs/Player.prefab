@@ -1365,8 +1365,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingWeapons:
   - {fileID: 5534056811834639351, guid: 2d99132c320880541abc5bb9576d83a7, type: 3}
+  - {fileID: 3235272591962434808, guid: 4e9f3bc4410dc5948b15dc5f5ee027c8, type: 3}
   weaponParent: {fileID: 714283597122525781}
-  projectileSpawnPoint: {fileID: 6905931851409608880}
+  projectileAnchorSpawnPoint: {fileID: 6905931851409608880}
   shootButton: Fire1
 --- !u!114 &6409868990984468626
 MonoBehaviour:

@@ -19,40 +19,36 @@ public class WeaponController : MonoBehaviour
     // currently being set by PlayerWeaponsManager on AddWeapon
     // as the spawnpoint is currently controlled by the player object
     //Tooltip("Location for projectile to spawn at")]
-    public Transform projectileSpawnPoint  {get; set;}
+    public Transform projectileAnchorSpawnPoint  {get; set;}
+    private Vector3 projectileSpawnPosition;
 
     [Tooltip("Weapon Modifier Manager, looks after changing modifiers")]
     public WeaponModifierManager weaponModifierManager;
 
     [Tooltip("The projectile prefab")]
     public ProjectileBase projectilePrefab;
+    private ProjectileBase placeholderProjectile;
 
     [Tooltip("Delay between fires")]
     public float shotDelay;
-
-    [Tooltip("max mana")]
-    public float maxMana;
-    private float currentMana;
 
     [Tooltip("scales the cost of casting")]
     public float manaScale;
     private float currentManaCost;
     private float lastManaCost;
 
-    [Tooltip("mana regen per tick")]
-    public float manaRegen;
-    [Tooltip("time per tick")]
-    public float manaRegenDelay;
-    private float lastManaRegenTime = Mathf.NegativeInfinity;
-
+    [HideInInspector]
     public GameObject player;
+    [HideInInspector]
+    public ManaUser playerMana;
+
+    public bool isActiveWeapon = false;
 
     // last value trackers
     // > outputs
     private Dictionary<OutputType, float> lastValues;
     // > modifiers
     private float last_sizemod = 0.0f;
- 
 
     float m_LastTimeShot = Mathf.NegativeInfinity;
     private float newest_mass = 0.0f;
@@ -66,28 +62,27 @@ public class WeaponController : MonoBehaviour
         lastValues = Enum.GetValues(typeof(OutputType)).Cast<OutputType>().Where(w => w != OutputType.None).ToDictionary(v => v, v => 0.0f);
         // todo: better?
         player = GameObject.FindWithTag("Player");
+        playerMana = player.GetComponent<ManaUser>();
 
-        currentMana = maxMana;
         GameEvents.current.onForceModChange += UpdateCurrentManacost;
         GameEvents.current.onSizeModChange += UpdateCurrentManacost;
         GameEvents.current.onTempModChange += UpdateCurrentManacost;
+
+    }
+
+    private void Start()
+    { 
+        projectileSpawnPosition = projectileAnchorSpawnPoint.position;
     }
 
     private void Update()
     {
-        checkOutputs();
-        RegenMana();
-
-    }
-
-    private void RegenMana()
-    {
-        // per second ticking
-        if ((lastManaRegenTime + manaRegenDelay) < Time.time)
+        if (isActiveWeapon)
         {
-            currentMana += manaRegen;
-            GameEvents.current.ManaChange(currentMana);
-            lastManaRegenTime = Time.time;
+            checkOutputs();
+
+            // should this be in fixedupdate?
+            UpdatePlaceholder();
         }
     }
 
@@ -133,6 +128,12 @@ public class WeaponController : MonoBehaviour
         }
     }
     
+    public void SetInactive()
+    {
+        isActiveWeapon = false;
+        Destroy(placeholderProjectile);
+    }
+
     public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, ProjectileBase prefab, Vector3 position, Quaternion rot)
     {
         ProjectileBase newProjectile = Instantiate(prefab, position, rot);
@@ -156,6 +157,22 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    private void UpdatePlaceholder()
+    {
+        if (!placeholderProjectile && isActiveWeapon)
+        {
+            placeholderProjectile = Instantiate(projectilePrefab, projectileSpawnPosition, Quaternion.LookRotation(GetShotDirection()));
+            placeholderProjectile.isPlaceholder = true;
+        }
+
+        weaponModifierManager.ApplyModifiers(placeholderProjectile);
+        var projRadius = placeholderProjectile.GetRadius();
+        projectileSpawnPosition = projectileAnchorSpawnPoint.position + GetShotDirection() * projRadius * 2;
+
+        placeholderProjectile.transform.position = projectileSpawnPosition;
+
+    }
+
     private bool CanShoot()
     {
         bool firerate = false;
@@ -168,12 +185,13 @@ public class WeaponController : MonoBehaviour
         }
         
         // manacost
-        if (currentMana > currentManaCost)
+        if (playerMana.GetCurrentMana() > currentManaCost)
         {
             manacost = true;
         }
 
-        return firerate && manacost;
+        // playerweaponsmanager will call handleshoot on the activeweapon only
+        return firerate && manacost && isActiveWeapon;
     }
 
     public void HandleShoot()
@@ -182,19 +200,16 @@ public class WeaponController : MonoBehaviour
         {
             // todo: take these maths out so we're not doubling projectiles
             // todo: some raycasting to check the furthest away we can spawn without spawning on the other side of something
-            var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
-            var projRadius = testProj.GetRadius();
-            Destroy(testProj.gameObject);
 
-            Vector3 adjustedSpawnPoint = player.transform.position + GetShotDirection() * projRadius*2; 
+            //Vector3 adjustedSpawnPoint = player.transform.position + 
             
             Vector3 shotDirection = GetShotDirection();             
-            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, adjustedSpawnPoint, Quaternion.LookRotation(shotDirection));
+            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, projectileSpawnPosition, Quaternion.LookRotation(shotDirection));
             newproj.Shoot(shotDirection);
             m_LastTimeShot = Time.time;
 
-            currentMana -= currentManaCost;
-            GameEvents.current.ManaChange(currentMana);
+            var newMana = playerMana.UpdateCurrentMana(-currentManaCost);
+            GameEvents.current.ManaChange(newMana);
         }
     }
 

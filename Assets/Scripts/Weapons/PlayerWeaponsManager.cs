@@ -8,9 +8,11 @@ public class PlayerWeaponsManager : MonoBehaviour
     public List<WeaponController> startingWeapons = new List<WeaponController>();
     public Transform weaponParent;
 
-    public Transform projectileSpawnPoint;
+    public Transform projectileAnchorSpawnPoint;
 
     public string shootButton = "Fire1";
+    public string swapUpButton = "WeaponSwapUp";
+    public string swapDownButton = "WeaponSwapDown";
 
     WeaponController[] weaponSlots = new WeaponController[5]; // 5 available weapon slots
     private int activeWeaponIndex;
@@ -41,12 +43,11 @@ public class PlayerWeaponsManager : MonoBehaviour
 
                 // set the projectile spawn point to the player
                 // TODO: if this is on the weapon or player depends on if the weapons are "upgrades" or not, and if the spell comes out of them or player
-                weaponInstance.projectileSpawnPoint = this.projectileSpawnPoint;
+                weaponInstance.projectileAnchorSpawnPoint = this.projectileAnchorSpawnPoint;
 
-                // Handle auto-switching to weapon if no weapons currently
 
                 weaponSlots[i] = weaponInstance;
-                SetActiveWeaponSlot(i);
+                //SetActiveWeaponSlot(i);
                 return true;
             }
         }
@@ -59,7 +60,19 @@ public class PlayerWeaponsManager : MonoBehaviour
         if (slot <= weaponSlots.Length && slot >= 0)
         {
             activeWeaponIndex = slot;
-            GameEvents.current.WeaponChange(GetActiveWeapon());
+            var activeWep = GetActiveWeapon();
+            GameEvents.current.WeaponChange(activeWep);
+            Debug.Log("firing weaponchange: " + activeWep);
+            activeWep.isActiveWeapon = true;
+
+            // set all other weapons inactive
+            for (int i = 0; i < weaponSlots.Length; i++)
+            {
+                if ((i != slot) && (weaponSlots[i]))
+                {
+                    weaponSlots[i].SetInactive();
+                }
+            }
         }
     }
 
@@ -83,11 +96,22 @@ public class PlayerWeaponsManager : MonoBehaviour
 
     private void Update()
     {
+        // todo: input manager
         if(Input.GetButton(shootButton))
         {
             WeaponController current_WeaponController = GetActiveWeapon();
             current_WeaponController.HandleShoot();
         }
+
+        else if (Input.GetButton(swapUpButton))
+        {
+            SetActiveWeaponSlot(activeWeaponIndex + 1);
+        }
+        else if (Input.GetButton(swapDownButton))
+        {
+            SetActiveWeaponSlot(activeWeaponIndex - 1);
+        }
+
     }
     
 }    

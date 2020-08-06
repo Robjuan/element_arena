@@ -81,6 +81,7 @@ public class Gauge_UIDisplay : MonoBehaviour
 
     public void UpdateMaximumPoints(WeaponController newWeapon)
     {
+        Debug.Log("updating max points: "+newWeapon);
         currentWeapon = newWeapon;
         float max = newWeapon.weaponModifierManager.m_PointsAvailable - 2;
         UpdateMaximum(max);

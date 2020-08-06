@@ -16,7 +16,7 @@ public class ManaGauge_UIDisplay : Gauge_UIDisplay
 
     private void UpdateMaxMana(WeaponController newWeapon)
     {
-        UpdateMaximum(newWeapon.maxMana);
+        UpdateMaximum(newWeapon.playerMana.maxMana);
     }
 
 }

@@ -16,6 +16,8 @@ public abstract class ProjectileBase : MonoBehaviour
 
     public float shootForce;
 
+    public bool isPlaceholder = false; // for calcs & showing before instantiate
+
     //public LayerMask layerMask = -1;
 
     public Vector3 initialPosition { get; protected set; }
@@ -56,18 +58,42 @@ public abstract class ProjectileBase : MonoBehaviour
         }
     }
 
+    protected void Start()
+    {
+        if (isPlaceholder)
+        {
+            // set appearance stuff
+            // mostly translucent and grey tinted should work for now
+            Color oldcolor = innerSphereRend.material.color;
+            innerSphereRend.material.SetColor("_Color", new Color(oldcolor.r, oldcolor.g, oldcolor.b, 0.1f));
+
+            // no collisions
+            thisColl.enabled = false;
+
+            // saves processing - will our scaling/radius etc still work?
+            //rigidBody.Sleep();
+        }
+    }
+
     protected void FixedUpdate()
     {
-        // physics updates must come before applys
-        UpdateMass();      
+        if (!isPlaceholder)
+        {
+            // physics updates must come before applys
+            UpdateMass();
 
-        ApplyGravity();
-        ApplyDrag();
+            ApplyGravity();
+            ApplyDrag();
+        }
+
     }
 
     protected void Update()
     {
-        UpdateThermalApperance();
+        if (!isPlaceholder)
+        {
+            UpdateThermalApperance();
+        }
     }
 
     public float GetRadius()
