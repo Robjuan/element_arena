@@ -30,7 +30,7 @@ public class GameFlowManager : MonoBehaviour
             Debug.Log("You have died.");
             Invoke("LoadScene", 5f);
         }
-        Debug.Log(deadActor + " has died");
+        //Debug.Log(deadActor + " has died");
     }
 
     void CheckSpawnerCount(GameObject deadSpawner)

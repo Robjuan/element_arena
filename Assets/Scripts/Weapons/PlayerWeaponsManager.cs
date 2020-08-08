@@ -57,13 +57,12 @@ public class PlayerWeaponsManager : MonoBehaviour
 
     public void SetActiveWeaponSlot(int slot)
     {
-        if (slot <= weaponSlots.Length && slot >= 0)
+        if (slot <= weaponSlots.Length && slot >= 0 && weaponSlots[slot] != null)
         {
             activeWeaponIndex = slot;
             var activeWep = GetActiveWeapon();
             GameEvents.current.WeaponChange(activeWep);
-            Debug.Log("firing weaponchange: " + activeWep);
-            activeWep.isActiveWeapon = true;
+            activeWep.SetActive();
 
             // set all other weapons inactive
             for (int i = 0; i < weaponSlots.Length; i++)
@@ -96,13 +95,13 @@ public class PlayerWeaponsManager : MonoBehaviour
 
     private void Update()
     {
+        WeaponController current_WeaponController = GetActiveWeapon();
+
         // todo: input manager
-        if(Input.GetButton(shootButton))
+        if (Input.GetButton(shootButton))
         {
-            WeaponController current_WeaponController = GetActiveWeapon();
             current_WeaponController.HandleShoot();
         }
-
         else if (Input.GetButton(swapUpButton))
         {
             SetActiveWeaponSlot(activeWeaponIndex + 1);
@@ -110,6 +109,10 @@ public class PlayerWeaponsManager : MonoBehaviour
         else if (Input.GetButton(swapDownButton))
         {
             SetActiveWeaponSlot(activeWeaponIndex - 1);
+        }
+        else
+        {
+            current_WeaponController.weaponModifierManager.CheckAndHandleModifyInputs();
         }
 
     }

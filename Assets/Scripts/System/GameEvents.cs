@@ -24,6 +24,15 @@ public class GameEvents : MonoBehaviour
 
     #region modifier change events
 
+    public event Action<Dictionary<WeaponModifier.ModifierType, float>> onModChange;
+    public void ModChange(Dictionary<WeaponModifier.ModifierType, float> modDict)
+    {
+        if (onModChange != null)
+        {
+            onModChange(modDict);
+        }
+    }
+
     public event Action<float> onSizeModChange;
     public void SizeModChange(float newVal)
     {

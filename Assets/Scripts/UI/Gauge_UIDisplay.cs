@@ -11,37 +11,36 @@ public class Gauge_UIDisplay : MonoBehaviour
 
     protected Color modColor = Color.black;
 
-    protected float fullWidth;
+    [HideInInspector]
+    public float fullWidth;
 
     protected Slider sliderElement;
     protected Image fillImage;
     protected Image backgroundImage;
     protected GameObject secondarylimitObject;
 
-    protected WeaponController currentWeapon;
+    //protected WeaponController currentWeapon;
 
     void Start()
     {
         RegisterComponents();
 
-        GameEvents.current.onWeaponChange += UpdateMaximumPoints;
-
         // firing this when we update the currently changing mod
         // so other two mods can listen and update their secondary maxes
-        GameEvents.current.onGaugeInnerUpdate += UpdateSecondaryMaximum;
+        //GameEvents.current.onGaugeInnerUpdate += UpdateSecondaryMaximum;
 
         switch (modType)
         {
             case WeaponModifier.ModifierType.Force:
-                GameEvents.current.onForceModChange += UpdateGaugeDisplay;
+                //GameEvents.current.onForceModChange += UpdateGaugeDisplay;
                 modColor = Color.yellow;
                 break;
             case WeaponModifier.ModifierType.Size:
-                GameEvents.current.onSizeModChange += UpdateGaugeDisplay;
+                //GameEvents.current.onSizeModChange += UpdateGaugeDisplay;
                 modColor = Color.green;
                 break;
             case WeaponModifier.ModifierType.Temperature:
-                GameEvents.current.onTempModChange += UpdateGaugeDisplay;
+                //GameEvents.current.onTempModChange += UpdateGaugeDisplay;
                 modColor = Color.red;
                 break;
         }
@@ -72,40 +71,30 @@ public class Gauge_UIDisplay : MonoBehaviour
             }
         }
     }
-
+    
     public void UpdateGaugeDisplay(float newVal)
     {
         sliderElement.value = newVal;
-        GameEvents.current.GaugeInnerUpdate();
     }
-
-    public void UpdateMaximumPoints(WeaponController newWeapon)
-    {
-        Debug.Log("updating max points: "+newWeapon);
-        currentWeapon = newWeapon;
-        float max = newWeapon.weaponModifierManager.m_PointsAvailable - 2;
-        UpdateMaximum(max);
-    }
-
-
+    
     public void UpdateMaximum(float newMax)
     {
         sliderElement.maxValue = newMax;
     }
-
+    /*
     public void UpdateSecondaryMaximum()
     {
         var used = currentWeapon.weaponModifierManager.GetCurrentUsedPoints();
         var max = currentWeapon.weaponModifierManager.m_PointsAvailable;
         UpdateSecondaryMarker((max - used) + sliderElement.value);
     }
-
+    */
     public void UpdateSecondaryMarker(float newSecMax)
     {
         // range will be 1 -> sliderElement.maxValue
         // this will be in  0 -> fullWidth
 
-        var posx = HelperFunctions.ScaleToRange(newSecMax, sliderElement.maxValue, 1f, fullWidth, 0f);
-        secondarylimitObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posx, 0f);
+        //var posx = HelperFunctions.ScaleToRange(newSecMax, sliderElement.maxValue, 1f, fullWidth, 0f);
+        secondarylimitObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(newSecMax, 0f);
     }
 }

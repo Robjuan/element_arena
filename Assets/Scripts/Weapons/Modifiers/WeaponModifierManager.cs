@@ -54,6 +54,16 @@ public class WeaponModifierManager : MonoBehaviour
         return total;
     }
 
+    public Dictionary<WeaponModifier.ModifierType, float> GetCurrentModDict()
+    {
+        Dictionary<WeaponModifier.ModifierType, float>  modDict = new Dictionary<WeaponModifier.ModifierType, float> { };
+        foreach (WeaponModifier mod in GetWeaponModifiers())
+        {
+            modDict.Add(mod.modifierType, mod.modifierValue);
+        }
+        return modDict;
+    }
+
     public void ApplyModifiers(ProjectileBase projectile)
     {
         foreach (var mod in GetWeaponModifiers())
@@ -65,6 +75,7 @@ public class WeaponModifierManager : MonoBehaviour
 
     public bool CanUpdateModifier(int delta, WeaponModifier mod)
     {
+        Debug.Log("wmm mpa: " + m_PointsAvailable);
         var goalValue = mod.modifierValue + delta;
         if (goalValue < 1 || goalValue > m_PointsAvailable)
         {
@@ -94,18 +105,7 @@ public class WeaponModifierManager : MonoBehaviour
         if(CanUpdateModifier(delta, mod))
         {
             mod.modifierValue += delta;
-            switch(mod.modifierType)
-            {
-                case WeaponModifier.ModifierType.Force:
-                    GameEvents.current.ForceModChange(mod.modifierValue);
-                    break;
-                case WeaponModifier.ModifierType.Size:
-                    GameEvents.current.SizeModChange(mod.modifierValue);
-                    break;
-                case WeaponModifier.ModifierType.Temperature:
-                    GameEvents.current.TempModChange(mod.modifierValue);
-                    break;
-            }   
+            GameEvents.current.ModChange(GetCurrentModDict());
         }
     }
 
@@ -135,8 +135,8 @@ public class WeaponModifierManager : MonoBehaviour
         return 0;
     }
 
-    void Update()
-    {
+    public void CheckAndHandleModifyInputs()
+    { 
         var modInput = GetModifyInput();
         if (modInput > -1)
         {

@@ -10,6 +10,8 @@ public class Number_UIDisplay : MonoBehaviour
     [Tooltip("(Case Sensitive) Match to ModiferType or OutputType")]
     public string m_thisDisplayTarget;
 
+    private WeaponModifier.ModifierType? modTarget = null;
+
     TextMeshProUGUI m_SelfTMP;
 
     void Start()
@@ -17,21 +19,14 @@ public class Number_UIDisplay : MonoBehaviour
         m_SelfTMP = gameObject.GetComponent<TextMeshProUGUI>();
         
         // remove this when gauges are working
-        if (Enum.TryParse<WeaponModifier.ModifierType>(m_thisDisplayTarget, out WeaponModifier.ModifierType modTarget))
+        if (Enum.TryParse<WeaponModifier.ModifierType>(m_thisDisplayTarget, out WeaponModifier.ModifierType modTarg))
         {
-            switch (modTarget)
+            if(modTarg != WeaponModifier.ModifierType.None)
             {
-                case WeaponModifier.ModifierType.Force:
-                    GameEvents.current.onForceModChange += UpdateNumberDisplay;
-                    break;
-                case WeaponModifier.ModifierType.Size:
-                    GameEvents.current.onSizeModChange += UpdateNumberDisplay;
-                    break;
-                case WeaponModifier.ModifierType.Temperature:
-                    GameEvents.current.onTempModChange += UpdateNumberDisplay;
-                    break;
+                GameEvents.current.onModChange += UpdateNumberDisplay;
+                modTarget = modTarg;
             }
-            
+
         } else if (Enum.TryParse<WeaponController.OutputType>(m_thisDisplayTarget, out WeaponController.OutputType outTarget))
         {
             switch (outTarget)
@@ -53,5 +48,13 @@ public class Number_UIDisplay : MonoBehaviour
     private void UpdateNumberDisplay(float newVal)
     {
         m_SelfTMP.SetText(newVal.ToString());
+    }
+
+    private void UpdateNumberDisplay(Dictionary<WeaponModifier.ModifierType, float> modDict)
+    {
+        if(modTarget != null)
+        {
+            m_SelfTMP.SetText(modDict[(WeaponModifier.ModifierType)modTarget].ToString());
+        }
     }
 }

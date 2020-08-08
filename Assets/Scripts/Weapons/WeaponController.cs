@@ -64,10 +64,7 @@ public class WeaponController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerMana = player.GetComponent<ManaUser>();
 
-        GameEvents.current.onForceModChange += UpdateCurrentManacost;
-        GameEvents.current.onSizeModChange += UpdateCurrentManacost;
-        GameEvents.current.onTempModChange += UpdateCurrentManacost;
-
+        GameEvents.current.onModChange += UpdateCurrentManacost;
     }
 
     private void Start()
@@ -128,10 +125,22 @@ public class WeaponController : MonoBehaviour
         }
     }
     
+    public void SetActive()
+    {
+        if (!isActiveWeapon)
+        {
+            isActiveWeapon = true;
+            GameEvents.current.ModChange(weaponModifierManager.GetCurrentModDict());
+        }
+    }
+
     public void SetInactive()
     {
-        isActiveWeapon = false;
-        Destroy(placeholderProjectile);
+        if (isActiveWeapon)
+        {
+            isActiveWeapon = false;
+            Destroy(placeholderProjectile);
+        }
     }
 
     public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, ProjectileBase prefab, Vector3 position, Quaternion rot)
@@ -141,12 +150,12 @@ public class WeaponController : MonoBehaviour
         return newProjectile;
     }
 
-    public void UpdateCurrentManacost(float newModVal)
+    public void UpdateCurrentManacost(Dictionary<WeaponModifier.ModifierType, float> modDict)
     {
         var manacost = 0f;
-        foreach (WeaponModifier mod in weaponModifierManager.GetWeaponModifiers())
+        foreach (float modVal in modDict.Keys)
         {
-            manacost += mod.modifierValue;
+            manacost += modVal;
         }
         currentManaCost = manacost * manaScale;
 
