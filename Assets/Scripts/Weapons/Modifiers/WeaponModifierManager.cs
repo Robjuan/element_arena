@@ -75,7 +75,6 @@ public class WeaponModifierManager : MonoBehaviour
 
     public bool CanUpdateModifier(int delta, WeaponModifier mod)
     {
-        Debug.Log("wmm mpa: " + m_PointsAvailable);
         var goalValue = mod.modifierValue + delta;
         if (goalValue < 1 || goalValue > m_PointsAvailable)
         {

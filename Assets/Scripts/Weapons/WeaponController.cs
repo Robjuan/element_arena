@@ -94,9 +94,8 @@ public class WeaponController : MonoBehaviour
                 // only do a new projectile if size has changed
                 if(last_sizemod != weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue)
                 {
-                    var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0,0,0), Quaternion.Euler(new Vector3(0,0,0)));
-                    newest_mass = testProj.GetMassFromSize();
-                    Destroy(testProj.gameObject);
+                    //var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0,0,0), Quaternion.Euler(new Vector3(0,0,0)));
+                    newest_mass = placeholderProjectile.GetMassFromSize();
                     last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
                 }
 
@@ -139,7 +138,7 @@ public class WeaponController : MonoBehaviour
         if (isActiveWeapon)
         {
             isActiveWeapon = false;
-            Destroy(placeholderProjectile);
+            Destroy(placeholderProjectile.gameObject);  
         }
     }
 
