@@ -20,7 +20,8 @@ public class GameFlowManager : MonoBehaviour
     void LoadScene()
     {
         // todo: take in scene as param or do this better
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // this isn't firing weaponchange events and stuff
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);        
     }
 
     void HandleActorDeath(GameObject deadActor)

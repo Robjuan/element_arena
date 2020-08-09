@@ -202,12 +202,11 @@ MonoBehaviour:
   weaponModifierManager: {fileID: 5385283056497896529}
   projectilePrefab: {fileID: 6641836871046021668, guid: 278d878626d767940a7ef6226452a9e8,
     type: 3}
-  shotDelay: 0.8
-  maxMana: 75
-  manaScale: 1
-  manaRegen: 1
-  manaRegenDelay: 0.3
+  shotDelay: 0.2
+  manaScale: 3
   player: {fileID: 0}
+  playerMana: {fileID: 0}
+  isActiveWeapon: 0
 --- !u!95 &6903781934268643361
 Animator:
   serializedVersion: 3

@@ -19,28 +19,18 @@ public class Gauge_UIDisplay : MonoBehaviour
     protected Image backgroundImage;
     protected GameObject secondarylimitObject;
 
-    //protected WeaponController currentWeapon;
-
     void Start()
     {
         RegisterComponents();
-
-        // firing this when we update the currently changing mod
-        // so other two mods can listen and update their secondary maxes
-        //GameEvents.current.onGaugeInnerUpdate += UpdateSecondaryMaximum;
-
         switch (modType)
         {
             case WeaponModifier.ModifierType.Force:
-                //GameEvents.current.onForceModChange += UpdateGaugeDisplay;
                 modColor = Color.yellow;
                 break;
             case WeaponModifier.ModifierType.Size:
-                //GameEvents.current.onSizeModChange += UpdateGaugeDisplay;
                 modColor = Color.green;
                 break;
             case WeaponModifier.ModifierType.Temperature:
-                //GameEvents.current.onTempModChange += UpdateGaugeDisplay;
                 modColor = Color.red;
                 break;
         }
@@ -81,20 +71,9 @@ public class Gauge_UIDisplay : MonoBehaviour
     {
         sliderElement.maxValue = newMax;
     }
-    /*
-    public void UpdateSecondaryMaximum()
-    {
-        var used = currentWeapon.weaponModifierManager.GetCurrentUsedPoints();
-        var max = currentWeapon.weaponModifierManager.m_PointsAvailable;
-        UpdateSecondaryMarker((max - used) + sliderElement.value);
-    }
-    */
+
     public void UpdateSecondaryMarker(float newSecMax)
     {
-        // range will be 1 -> sliderElement.maxValue
-        // this will be in  0 -> fullWidth
-
-        //var posx = HelperFunctions.ScaleToRange(newSecMax, sliderElement.maxValue, 1f, fullWidth, 0f);
         secondarylimitObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(newSecMax, 0f);
     }
 }

@@ -24,6 +24,7 @@ public abstract class ProjectileBase : MonoBehaviour
     public Vector3 initialDirection { get; protected set; }
     protected Rigidbody rigidBody;
     protected Renderer innerSphereRend;
+    protected Renderer outerSphereRend;
     public ThermalBody thermals;
     protected SphereCollider thisColl;
 
@@ -31,6 +32,13 @@ public abstract class ProjectileBase : MonoBehaviour
     protected float radius;
 
     protected GameObject innerSphere;
+
+    public float transparencyValue;
+    public Material inner_TransparentMaterial;
+    public Material outer_TransparentMaterial;
+    protected Material inner_StartingMaterial;
+    protected Material outer_StartingMaterial;
+
 
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
@@ -53,7 +61,12 @@ public abstract class ProjectileBase : MonoBehaviour
             {
                 innerSphere = child.gameObject;
                 innerSphereRend = child.GetComponent<Renderer>();
-                break;
+                inner_StartingMaterial = innerSphereRend.material;
+
+            } else if (child.tag == "Projectile_OuterSphere")
+            {
+                outerSphereRend = child.GetComponent<Renderer>();
+                outer_StartingMaterial = innerSphereRend.material;
             }
         }
     }
@@ -62,10 +75,14 @@ public abstract class ProjectileBase : MonoBehaviour
     {
         if (isPlaceholder)
         {
-            // set appearance stuff
-            // mostly translucent and grey tinted should work for now
-            Color oldcolor = innerSphereRend.material.color;
-            innerSphereRend.material.SetColor("_Color", new Color(oldcolor.r, oldcolor.g, oldcolor.b, 0.1f));
+            innerSphereRend.material = inner_TransparentMaterial;
+            outerSphereRend.material = outer_TransparentMaterial;
+
+            Color inner_oldcolor = innerSphereRend.material.color;
+            innerSphereRend.material.SetColor("_Color", new Color(inner_oldcolor.r, inner_oldcolor.g, inner_oldcolor.b, transparencyValue));
+
+            Color outer_oldcolor = outerSphereRend.material.color;
+            outerSphereRend.material.SetColor("_Color", new Color(outer_oldcolor.r, outer_oldcolor.g, outer_oldcolor.b, transparencyValue));
 
             // no collisions
             thisColl.enabled = false;
@@ -90,10 +107,10 @@ public abstract class ProjectileBase : MonoBehaviour
 
     protected void Update()
     {
-        if (!isPlaceholder)
-        {
+        //if (!isPlaceholder)
+        //{
             UpdateThermalApperance();
-        }
+        //}
     }
 
     public float GetRadius()

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - UI
   - Projectile_InnerSphere
+  - Projectile_OuterSphere
   layers:
   - Default
   - TransparentFX

@@ -33,33 +33,6 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<float> onSizeModChange;
-    public void SizeModChange(float newVal)
-    {
-        if (onSizeModChange != null)
-        {
-            onSizeModChange(newVal);
-        }
-    }
-
-    public event Action<float> onForceModChange;
-    public void ForceModChange(float newVal)
-    {
-        if (onForceModChange != null)
-        {
-            onForceModChange(newVal);
-        }
-    }
-
-    public event Action<float> onTempModChange;
-    public void TempModChange(float newVal)
-    {
-        if (onTempModChange != null)
-        {
-            onTempModChange(newVal);
-        }
-    }
-
     #endregion
 
     #region output change events
@@ -73,12 +46,12 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<float> onManaCostChange;
-    public void ManaCostChange(float newVal)
+    public event Action<float, float> onManaCostChange;
+    public void ManaCostChange(float newVal, float maxMana)
     {
         if (onManaCostChange != null)
         {
-            onManaCostChange(newVal);
+            onManaCostChange(newVal, maxMana);
         }
     }
 

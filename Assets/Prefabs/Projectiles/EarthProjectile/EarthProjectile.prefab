@@ -131,7 +131,13 @@ MonoBehaviour:
   gravity: 20
   density: 30
   shootForce: 10
+  isPlaceholder: 0
   thermals: {fileID: 6190141328102635077}
+  transparencyValue: 0.4
+  inner_TransparentMaterial: {fileID: 2100000, guid: 34ef17f0a3a213845a7236e7c483f06d,
+    type: 2}
+  outer_TransparentMaterial: {fileID: 2100000, guid: b6ffb09012bb00b4083571762a5a6e8d,
+    type: 2}
   ignitionColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &6190141328102635077
 MonoBehaviour:
@@ -190,7 +196,7 @@ GameObject:
   - component: {fileID: 6850705833787912502}
   m_Layer: 0
   m_Name: Icosphere_2
-  m_TagString: Untagged
+  m_TagString: Projectile_OuterSphere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

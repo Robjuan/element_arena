@@ -94,8 +94,14 @@ public class WeaponController : MonoBehaviour
                 // only do a new projectile if size has changed
                 if(last_sizemod != weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue)
                 {
-                    //var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0,0,0), Quaternion.Euler(new Vector3(0,0,0)));
-                    newest_mass = placeholderProjectile.GetMassFromSize();
+                    if (placeholderProjectile)
+                    {
+                        newest_mass = placeholderProjectile.GetMassFromSize();
+                    } else
+                    {
+                        var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
+                        newest_mass = testProj.GetMassFromSize();
+                    }
                     last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
                 }
 
@@ -152,7 +158,7 @@ public class WeaponController : MonoBehaviour
     public void UpdateCurrentManacost(Dictionary<WeaponModifier.ModifierType, float> modDict)
     {
         var manacost = 0f;
-        foreach (float modVal in modDict.Keys)
+        foreach (float modVal in modDict.Values)
         {
             manacost += modVal;
         }
@@ -160,7 +166,7 @@ public class WeaponController : MonoBehaviour
 
         if (currentManaCost != lastManaCost)
         {
-            GameEvents.current.ManaCostChange(currentManaCost);
+            GameEvents.current.ManaCostChange(currentManaCost, playerMana.maxMana);
             lastManaCost = currentManaCost;
         }
     }
@@ -175,7 +181,8 @@ public class WeaponController : MonoBehaviour
 
         weaponModifierManager.ApplyModifiers(placeholderProjectile);
         var projRadius = placeholderProjectile.GetRadius();
-        projectileSpawnPosition = projectileAnchorSpawnPoint.position + GetShotDirection() * projRadius * 2;
+        
+        projectileSpawnPosition = projectileAnchorSpawnPoint.position + (GetShotDirection() * projRadius * 2) + (transform.up * projRadius / 2);
 
         placeholderProjectile.transform.position = projectileSpawnPosition;
 
