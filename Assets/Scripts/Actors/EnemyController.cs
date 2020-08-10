@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public Animator anim;
+
     public float touchDamage;
     public Transform walkTarget;
     public float walkSpeed;
@@ -27,12 +29,20 @@ public class EnemyController : MonoBehaviour
     {
         if (IsAlive && this.gameObject)
         {
+            
             IsAlive = false;
             foreach(Renderer rend in rends)
             {
                 rend.material.color = Color.red;
             }
-            Destroy(this.gameObject, 2f);
+
+            if (anim)
+            {
+                anim.SetTrigger("Die");
+            } else
+            {
+                Destroy(this.gameObject, 2f);
+            }
         }
 
     }
@@ -68,6 +78,11 @@ public class EnemyController : MonoBehaviour
         // maybe with better nav and more varied attacks
         if (other.tag == "Player")
         {
+            if (anim)
+            {
+                anim.SetBool("Attack", true);
+            }
+
             Damageable damageable = other.GetComponent<Damageable>();
             if (damageable)
             {
@@ -76,4 +91,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
+    void Update()
+    {
+
+    }
 }

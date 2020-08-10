@@ -98,11 +98,12 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6641836871046021668, guid: 278d878626d767940a7ef6226452a9e8,
     type: 3}
   shotDelay: 0.8
-  maxMana: 50
   manaScale: 1
-  manaRegen: 1
-  manaRegenDelay: 0.2
+  placeholderFadeTime: 2
+  placeholderFadeDelay: 3
   player: {fileID: 0}
+  playerMana: {fileID: 0}
+  isActiveWeapon: 0
 --- !u!95 &4604434778325849902
 Animator:
   serializedVersion: 3

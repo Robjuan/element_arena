@@ -37,6 +37,12 @@ public class WeaponController : MonoBehaviour
     private float currentManaCost;
     private float lastManaCost;
 
+    [Tooltip("Timing & Pace of placeholder fade; reset on change")]
+    public float placeholderFadeTime;
+    public float placeholderFadeDelay;
+    private float currentFadeTime = 0f;
+    private float lastPlaceholderFadeReset;
+
     [HideInInspector]
     public GameObject player;
     [HideInInspector]
@@ -101,6 +107,7 @@ public class WeaponController : MonoBehaviour
                     {
                         var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
                         newest_mass = testProj.GetMassFromSize();
+                        Destroy(testProj.gameObject);
                     }
                     last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
                 }
@@ -136,6 +143,7 @@ public class WeaponController : MonoBehaviour
         {
             isActiveWeapon = true;
             GameEvents.current.ModChange(weaponModifierManager.GetCurrentModDict());
+            lastPlaceholderFadeReset = Time.time;
         }
     }
 
@@ -168,6 +176,14 @@ public class WeaponController : MonoBehaviour
         {
             GameEvents.current.ManaCostChange(currentManaCost, playerMana.maxMana);
             lastManaCost = currentManaCost;
+            
+            if(placeholderProjectile != null)
+            {
+                // this should potentially be called by modchange, but this func is called by modchange so that's ok
+                lastPlaceholderFadeReset = Time.time;
+                currentFadeTime = 0f;
+                placeholderProjectile.UpdateTransparency(1);
+            }
         }
     }
 
@@ -182,10 +198,22 @@ public class WeaponController : MonoBehaviour
         weaponModifierManager.ApplyModifiers(placeholderProjectile);
         var projRadius = placeholderProjectile.GetRadius();
         
-        projectileSpawnPosition = projectileAnchorSpawnPoint.position + (GetShotDirection() * projRadius * 2) + (transform.up * projRadius / 2);
+        projectileSpawnPosition = projectileAnchorSpawnPoint.position + (GetShotDirection() * projRadius * 2) + (transform.up * projRadius / 1.5f);
 
         placeholderProjectile.transform.position = projectileSpawnPosition;
 
+        // if float delay has passed since last update, start fade
+        if (lastPlaceholderFadeReset + placeholderFadeDelay < Time.time)
+        {
+            currentFadeTime += Time.deltaTime;
+            if (currentFadeTime > placeholderFadeTime)
+            {
+                currentFadeTime = placeholderFadeTime;
+            }
+            var perc = currentFadeTime / placeholderFadeTime;
+            var max = placeholderProjectile.maxTransparencyValue;
+            placeholderProjectile.UpdateTransparency(Mathf.Lerp(max, 0, perc));
+        }
     }
 
     private bool CanShoot()

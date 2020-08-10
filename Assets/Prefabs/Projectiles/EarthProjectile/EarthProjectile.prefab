@@ -133,7 +133,7 @@ MonoBehaviour:
   shootForce: 10
   isPlaceholder: 0
   thermals: {fileID: 6190141328102635077}
-  transparencyValue: 0.4
+  maxTransparencyValue: 0.4
   inner_TransparentMaterial: {fileID: 2100000, guid: 34ef17f0a3a213845a7236e7c483f06d,
     type: 2}
   outer_TransparentMaterial: {fileID: 2100000, guid: b6ffb09012bb00b4083571762a5a6e8d,

@@ -1,7 +1,5 @@
 using UnityEngine;
 using System;
-using UnityEditor.Animations;
-using UnityEngine.UIElements;
 
 public class EarthProjectile : ProjectileBase
 {

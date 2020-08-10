@@ -204,6 +204,8 @@ MonoBehaviour:
     type: 3}
   shotDelay: 0.2
   manaScale: 3
+  placeholderFadeTime: 2
+  placeholderFadeDelay: 3
   player: {fileID: 0}
   playerMana: {fileID: 0}
   isActiveWeapon: 0

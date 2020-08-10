@@ -33,7 +33,7 @@ public abstract class ProjectileBase : MonoBehaviour
 
     protected GameObject innerSphere;
 
-    public float transparencyValue;
+    public float maxTransparencyValue;
     public Material inner_TransparentMaterial;
     public Material outer_TransparentMaterial;
     protected Material inner_StartingMaterial;
@@ -77,12 +77,7 @@ public abstract class ProjectileBase : MonoBehaviour
         {
             innerSphereRend.material = inner_TransparentMaterial;
             outerSphereRend.material = outer_TransparentMaterial;
-
-            Color inner_oldcolor = innerSphereRend.material.color;
-            innerSphereRend.material.SetColor("_Color", new Color(inner_oldcolor.r, inner_oldcolor.g, inner_oldcolor.b, transparencyValue));
-
-            Color outer_oldcolor = outerSphereRend.material.color;
-            outerSphereRend.material.SetColor("_Color", new Color(outer_oldcolor.r, outer_oldcolor.g, outer_oldcolor.b, transparencyValue));
+            UpdateTransparency(1);
 
             // no collisions
             thisColl.enabled = false;
@@ -90,6 +85,15 @@ public abstract class ProjectileBase : MonoBehaviour
             // saves processing - will our scaling/radius etc still work?
             //rigidBody.Sleep();
         }
+    }
+
+    public void UpdateTransparency(float transparencyVal)
+    {
+        Color inner_oldcolor = innerSphereRend.material.color;
+        innerSphereRend.material.SetColor("_Color", new Color(inner_oldcolor.r, inner_oldcolor.g, inner_oldcolor.b, transparencyVal * maxTransparencyValue));
+
+        Color outer_oldcolor = outerSphereRend.material.color;
+        outerSphereRend.material.SetColor("_Color", new Color(outer_oldcolor.r, outer_oldcolor.g, outer_oldcolor.b, transparencyVal * maxTransparencyValue));
     }
 
     protected void FixedUpdate()

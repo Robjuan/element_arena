@@ -19,9 +19,8 @@ public class GameFlowManager : MonoBehaviour
 
     void LoadScene()
     {
-        // todo: take in scene as param or do this better
-        // this isn't firing weaponchange events and stuff
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);        
+        // 0 is the first scene in our build index, which is our menu scene
+        SceneManager.LoadScene(0);        
     }
 
     void HandleActorDeath(GameObject deadActor)
@@ -29,7 +28,7 @@ public class GameFlowManager : MonoBehaviour
         if (deadActor.tag == "Player")
         {
             Debug.Log("You have died.");
-            Invoke("LoadScene", 5f);
+            Invoke("LoadScene", 0.5f);
         }
         //Debug.Log(deadActor + " has died");
     }
@@ -40,7 +39,7 @@ public class GameFlowManager : MonoBehaviour
         if (currentAliveSpawners < spawnersToDefeat)
         {
             Debug.Log("You have won!!");
-            Invoke("LoadScene", 5f);
+            Invoke("LoadScene", 1f);
         }
     }
 
