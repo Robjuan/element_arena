@@ -55,7 +55,7 @@ public class EnemySpawner : MonoBehaviour
         if (isActive && ((lastSpawn + spawnDelay) < Time.time))
         {
             var newEnemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.LookRotation(spawnPoint.forward));
-            newEnemy.SetWalkTarget(player.transform);
+            //newEnemy.SetWalkTarget(player.transform);
             lastSpawn = Time.time;
             spawnedCount += 1;
             spawnedEnemies.Add(newEnemy);

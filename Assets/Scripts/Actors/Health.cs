@@ -8,11 +8,12 @@ public class Health : MonoBehaviour
     public float maxHealth = 10f;
 
     private ActorController parent;
-    private bool isDead = false;
+    private bool isDead;
     public float currentHealth { get; set; }
 
     private void Start()
     {
+        isDead = false;
         currentHealth = maxHealth;
         parent = GetComponentInParent<ActorController>();
     }

@@ -2,39 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator), typeof(Damageable), typeof(ManaUser))]
 public abstract class ActorController : MonoBehaviour
 {
     [Header("Actor Components")]
-    public Animator anim;
-    public Health health ;
-    public Damageable damage;
-    public ManaUser mana;
-    public StateController aiSateController;
+    [HideInInspector] public Animator anim;
+    [HideInInspector] public Health health; // damage has RequireComponent health
+    [HideInInspector] public Damageable damage;
+    [HideInInspector] public ManaUser mana;
 
     public abstract bool IsAlive { get; set; }
     
-    
     public abstract void Die();
     public abstract void ReceiveDamage();
-    
+
 
     void Awake()
     {
-        /*
         anim = GetComponent<Animator>();
         health = GetComponent<Health>();
         damage = GetComponent<Damageable>();
-        mana = GetComponent<ManaUser>();
-        aiSateController = GetComponent<StateController>();
-        */
+        mana = GetComponent<ManaUser>();        
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
- 
 
 }

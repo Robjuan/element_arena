@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class StateController : MonoBehaviour
 {
+	private bool aiActive;
+
 	public State currentState;
 	public EnemyStats enemyStats;
 	public Transform eyes;
@@ -16,8 +18,7 @@ public class StateController : MonoBehaviour
 	public List<Transform> wayPointList;
 	[HideInInspector] public int nextWayPoint;
 
-	private bool aiActive;
-
+	[HideInInspector] public Transform chaseTarget;
 
 	void Awake()
 	{

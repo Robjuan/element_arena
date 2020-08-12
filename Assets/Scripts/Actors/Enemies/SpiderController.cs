@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class SpiderController : EnemyController
 {
-    // Start is called before the first frame update
-    void Start()
+   
+    // todo: have the statecontroller handle attacking
+    protected void OnCollisionEnter(Collision coll)
     {
-        
+        var other = coll.gameObject;
+        // todo: let them damage each other?
+        // maybe with better nav and more varied attacks
+        if (other.tag == "Player")
+        {
+            if (anim)
+            {
+                anim.SetBool("Attack", true);
+            }
+
+            Damageable damageable = other.GetComponent<Damageable>();
+            if (damageable)
+            {
+                damageable.InflictDamage(touchDamage, this.gameObject);
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void OnCollisionExit(Collision coll)
     {
-        
+        if (anim)
+        {
+            anim.SetBool("Attack", false);
+        }
     }
+
 }
