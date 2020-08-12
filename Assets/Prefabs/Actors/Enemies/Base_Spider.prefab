@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7743324308730606563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4233162910580133965}
+  m_Layer: 0
+  m_Name: eyes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4233162910580133965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743324308730606563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0.137}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8094735274802178095}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8629034209638052668
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,6 +42,9 @@ GameObject:
   - component: {fileID: 2451646144024986305}
   - component: {fileID: 2489356042357333671}
   - component: {fileID: 1554255802268511517}
+  - component: {fileID: 4032773301741596325}
+  - component: {fileID: 6513663785089436960}
+  - component: {fileID: 2838100733250170400}
   m_Layer: 0
   m_Name: Base_Spider
   m_TagString: Untagged
@@ -31,6 +64,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 5633927702959114189}
+  - {fileID: 4233162910580133965}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,6 +81,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 5633927702966347897}
+  health: {fileID: 2489356042357333671}
+  damage: {fileID: 1554255802268511517}
+  mana: {fileID: 0}
+  aiSateController: {fileID: 6513663785089436960}
   touchDamage: 10
   walkTarget: {fileID: 0}
   walkSpeed: 3
@@ -77,6 +115,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageMultiplier: 1
   sensibilityToSelfdamage: 0.5
+--- !u!65 &4032773301741596325
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629034209638052668}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3236074, y: 0.17220294, z: 0.33022264}
+  m_Center: {x: 0.0013834595, y: 0.086509526, z: -0.012903857}
+--- !u!114 &6513663785089436960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629034209638052668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37285c33b35ad81439665b8dbc09a193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: {fileID: 11400000, guid: 870f5421082278e40b974396741bf2bf, type: 2}
+  enemyStats: {fileID: 11400000, guid: 9eef64795ec44b0489ec51b93f36be90, type: 2}
+  eyes: {fileID: 4233162910580133965}
+  navMeshAgent: {fileID: 0}
+  wayPointList: []
+  nextWayPoint: 0
+--- !u!195 &2838100733250170400
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629034209638052668}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &5633927702958988569
 PrefabInstance:
   m_ObjectHideFlags: 0

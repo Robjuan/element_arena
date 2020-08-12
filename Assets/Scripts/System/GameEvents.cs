@@ -7,7 +7,6 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
 
-    // Start is called before the first frame update
     void Awake()
     {
        current = this;
@@ -70,19 +69,6 @@ public class GameEvents : MonoBehaviour
         if (onMassChange != null)
         {
             onMassChange(newVal);
-        }
-    }
-
-    #endregion
-
-    #region UI intra-events
-
-    public event Action onGaugeInnerUpdate;
-    public void GaugeInnerUpdate()
-    {
-        if (onGaugeInnerUpdate != null)
-        {
-            onGaugeInnerUpdate();
         }
     }
 

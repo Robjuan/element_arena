@@ -23,7 +23,10 @@ public class DamageTrigger : MonoBehaviour
         {
             foreach (var dmg in currentContainedDamageables)
             {
-                dmg.InflictDamage(damagePerTick,this.gameObject);
+                if(dmg != null)
+                {
+                    dmg.InflictDamage(damagePerTick, this.gameObject);
+                }
             }
             m_LastTickTime = Time.time;
         }
@@ -50,16 +53,16 @@ public class DamageTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var dmg = getDamageable(other);
-        if (dmg){
-            currentContainedDamageables.Add(getDamageable(other));
+        if (dmg != null){
+            currentContainedDamageables.Add(dmg);
         }        
     }
 
     private void OnTriggerExit(Collider other)
     {
         var dmg = getDamageable(other);
-        if (dmg){
-            currentContainedDamageables.Remove(getDamageable(other));
+        if (dmg != null){
+            currentContainedDamageables.Remove(dmg);
         }
     }
 }

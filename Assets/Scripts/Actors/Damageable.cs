@@ -11,19 +11,12 @@ public class Damageable : MonoBehaviour
 
     public Health health { get; private set; }
 
-    private EnemyController parent;
+    private ActorController parent;
 
-    void Awake()
+    void Start()
     {
-        // find the health component either at the same level, or higher in the hierarchy
         health = GetComponent<Health>();
-        if (!health)
-        {
-            health = GetComponentInParent<Health>();
-        }
-
-        // currently this is working on NPCs but not on spiders?
-        parent = GetComponent<EnemyController>();
+        parent = GetComponent<ActorController>();
     }
 
     public void InflictDamage(float damage, GameObject damageSource)
@@ -41,11 +34,9 @@ public class Damageable : MonoBehaviour
 
             // apply the damages
             health.TakeDamage(totalDamage, damageSource);
-            Debug.Log(parent);
-            // even parent is null on spider??
-            if (parent.anim != null)
+            if(parent)
             {
-                parent.anim.SetTrigger("ReceiveDamage");
+                parent.ReceiveDamage();
             }
         }
     }

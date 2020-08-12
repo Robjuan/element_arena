@@ -7,14 +7,14 @@ public class Health : MonoBehaviour
     [Tooltip("Maximum amount of health")]
     public float maxHealth = 10f;
 
-    private EnemyController parent;
+    private ActorController parent;
     private bool isDead = false;
     public float currentHealth { get; set; }
 
     private void Start()
     {
         currentHealth = maxHealth;
-        parent = GetComponentInParent<EnemyController>();
+        parent = GetComponentInParent<ActorController>();
     }
 
     public void Heal(float healAmount)
