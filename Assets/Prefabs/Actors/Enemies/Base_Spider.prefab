@@ -144,7 +144,7 @@ MonoBehaviour:
   lookRange: 40
   lookSphereCastRadius: 1
   attackDamage: 20
-  attackSpeed: 5
+  attackDelay: 0
   attackRange: 5
 --- !u!114 &6513663785089436960
 MonoBehaviour:
@@ -260,7 +260,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5e9135e27e909a042b2030159411a9ca, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 7a538f29bad700d47a681a6568b943b4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7a538f29bad700d47a681a6568b943b4, type: 3}
 --- !u!4 &5633927702959114189 stripped
 Transform:

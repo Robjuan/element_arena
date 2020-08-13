@@ -19,10 +19,13 @@ public class AttackAction : Action
         if (Physics.SphereCast(controller.eyes.position, controller.parent.lookSphereCastRadius, controller.eyes.forward, out hit, controller.parent.attackRange)
             && hit.collider.CompareTag("Player"))
         {
-            if(controller.CheckCountDownElapsed(controller.parent.attackSpeed))
-            {
-                controller.parent.TryAttack(hit.collider);
-            }
+            // doesn't seem to attack repeatedly if you're in place?
+            // potentially replace with collider/trigger in front then raycast check
+            controller.parent.TryAttack(hit.collider);
+        }
+        else // potentially wouldn't need this if patrolaction was last in list?
+        {
+            controller.parent.anim.SetBool("Run", true);
         }
     }
 }

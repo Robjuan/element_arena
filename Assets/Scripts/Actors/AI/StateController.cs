@@ -9,7 +9,6 @@ public class StateController : MonoBehaviour
 
 	public State currentState;
 	public State remainState;
-	//public EnemyStats enemyStats;
 
 	public Transform eyes;
 	public List<Transform> wayPointList;
@@ -66,13 +65,14 @@ public class StateController : MonoBehaviour
 
 	void OnDrawGizmos()
     {
-		if(currentState != null && eyes != null)
+		if(currentState != null && eyes != null && parent != null)
         {
 			Gizmos.color = currentState.sceneGizmoColor;
 			Gizmos.DrawWireSphere(eyes.position, parent.lookSphereCastRadius);
         }
     }
 
+	/*
 	public bool CheckCountDownElapsed(float duration)
     {
 		stateTimeElapsed += Time.deltaTime;
@@ -83,4 +83,5 @@ public class StateController : MonoBehaviour
     {
 		stateTimeElapsed = 0;
     }
+	*/
 }

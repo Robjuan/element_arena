@@ -3211,6 +3211,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 988867710076129186, guid: a2ff9c945f4ef2b47a6acb6b6312b159,
+        type: 3}
+      propertyPath: attackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 988867710076129186, guid: a2ff9c945f4ef2b47a6acb6b6312b159,
+        type: 3}
+      propertyPath: attackDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 988867710076129186, guid: a2ff9c945f4ef2b47a6acb6b6312b159,
+        type: 3}
+      propertyPath: attackDamage
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 2451646144024986305, guid: a2ff9c945f4ef2b47a6acb6b6312b159,
         type: 3}
       propertyPath: walkTarget

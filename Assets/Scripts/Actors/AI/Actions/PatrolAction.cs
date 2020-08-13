@@ -15,7 +15,10 @@ public class PatrolAction : Action
     {
         controller.navMeshAgent.SetDestination(controller.wayPointList[controller.nextWayPoint].position);
         controller.navMeshAgent.isStopped = false;
-        if(controller.navMeshAgent.remainingDistance <= controller.navMeshAgent.stoppingDistance 
+
+        controller.parent.anim.SetBool("Run", true);
+
+        if (controller.navMeshAgent.remainingDistance <= controller.navMeshAgent.stoppingDistance 
             && !controller.navMeshAgent.pathPending)
         {
             // we have arrived, increase waypoint but don't go past the end, go back to the start

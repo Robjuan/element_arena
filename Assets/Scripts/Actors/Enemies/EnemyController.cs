@@ -21,8 +21,10 @@ public class EnemyController : ActorController
 
     [Header("Combat Stats")]
     public float attackDamage;
-    public float attackSpeed;
+    public float attackDelay;
     public float attackRange;
+
+    protected float lastAttackTime = Mathf.NegativeInfinity;
 
     public virtual void TryAttack(Collider other)
     {
@@ -44,7 +46,8 @@ public class EnemyController : ActorController
         if (IsAlive)
         {
             IsAlive = false;
-            //aiSateController.Deactivate();
+            aiSateController.Deactivate();
+            navMeshAgent.isStopped = true;
             anim.SetTrigger("Die");
             //this.GetComponent<BoxCollider>().enabled = false;
             //Destroy(this.gameObject, 2f);

@@ -15,7 +15,13 @@ public class Health : MonoBehaviour
     {
         isDead = false;
         currentHealth = maxHealth;
-        parent = GetComponentInParent<ActorController>();
+        parent = GetComponent<ActorController>();
+        
+        // initialise HUD
+        if (this.gameObject.tag == "Player")
+        {
+            GameEvents.current.HealthChange(currentHealth);
+        }
     }
 
     public void Heal(float healAmount)
@@ -48,7 +54,7 @@ public class Health : MonoBehaviour
     {
         if (currentHealth <= 0f && !isDead)
         {
-            // parent is EnemyController if exists
+            Debug.Log("Dying actor: " + this.gameObject);
             if (parent)
             {
                 parent.Die();

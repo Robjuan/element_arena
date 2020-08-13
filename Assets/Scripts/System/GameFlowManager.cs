@@ -9,7 +9,7 @@ public class GameFlowManager : MonoBehaviour
 
     private int currentAliveSpawners;
 
-    void Awake()
+    void Start()
     {
         GameEvents.current.onActorDeath += HandleActorDeath;
         GameEvents.current.onSpawnerEmpty += CheckSpawnerCount;
@@ -25,7 +25,7 @@ public class GameFlowManager : MonoBehaviour
 
     void HandleActorDeath(GameObject deadActor)
     {
-        if (deadActor.tag == "Player")
+        if (deadActor.CompareTag("Player"))
         {
             Debug.Log("You have died.");
             Invoke("LoadScene", 0.5f);
