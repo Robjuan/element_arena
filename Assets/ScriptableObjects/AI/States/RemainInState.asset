@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05d65e8dbc19c2e43b61238de58e6a5c, type: 3}
-  m_Name: PatrolChaser
+  m_Name: RemainInState
   m_EditorClassIdentifier: 
-  actions:
-  - {fileID: 11400000, guid: 6de491e32ee94ac448b3050db7b36dbc, type: 2}
-  sceneGizmoColor: {r: 0.09504831, g: 1, b: 0, a: 1}
+  actions: []
+  transitions: []
+  sceneGizmoColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}

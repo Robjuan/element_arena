@@ -8,28 +8,27 @@ public class StateController : MonoBehaviour
 	private bool aiActive;
 
 	public State currentState;
-	public EnemyStats enemyStats;
+	public State remainState;
+	//public EnemyStats enemyStats;
+
 	public Transform eyes;
-
-
-	[HideInInspector] public NavMeshAgent navMeshAgent;
-	//[HideInInspector] public Complete.TankShooting tankShooting;
-	//	[HideInInspector] 
 	public List<Transform> wayPointList;
+
+	// information from parent EnemyController
+	[HideInInspector] public NavMeshAgent navMeshAgent;
+	[HideInInspector] public EnemyController parent;
+
+	// cross-state info
 	[HideInInspector] public int nextWayPoint;
+	[HideInInspector] public Transform chaseTarget; // set in LookDecision
+	[HideInInspector] public float stateTimeElapsed;
 
-	[HideInInspector] public Transform chaseTarget;
-
-	void Awake()
+	public void SetupAI(bool aiActiveParam, NavMeshAgent EnemyControllerNavMeshAgent, EnemyController parentController)
 	{
-		//tankShooting = GetComponent<Complete.TankShooting>();
-		navMeshAgent = GetComponent<NavMeshAgent>();
-	}
+		parent = parentController;
+		navMeshAgent = EnemyControllerNavMeshAgent;
 
-	public void SetupAI(bool aiActivationFromTankManager) //, List<Transform> wayPointsFromTankManager)
-	{
-		//wayPointList = wayPointsFromTankManager;
-		aiActive = aiActivationFromTankManager;
+		aiActive = aiActiveParam;
 		if (aiActive)
 		{
 			navMeshAgent.enabled = true;
@@ -57,12 +56,31 @@ public class StateController : MonoBehaviour
 		currentState.UpdateState(this);
     }
 	
+	public void TransitionToState(State nextState)
+    {
+		if (nextState != remainState)
+        {
+			currentState = nextState;
+        }
+    }
+
 	void OnDrawGizmos()
     {
 		if(currentState != null && eyes != null)
         {
 			Gizmos.color = currentState.sceneGizmoColor;
-			Gizmos.DrawWireSphere(eyes.position, enemyStats.lookSphereCastRadius);
+			Gizmos.DrawWireSphere(eyes.position, parent.lookSphereCastRadius);
         }
+    }
+
+	public bool CheckCountDownElapsed(float duration)
+    {
+		stateTimeElapsed += Time.deltaTime;
+		return (stateTimeElapsed >= duration);
+    }
+
+	private void OnExitState()
+    {
+		stateTimeElapsed = 0;
     }
 }

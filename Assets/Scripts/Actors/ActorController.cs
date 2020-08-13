@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator), typeof(Damageable), typeof(ManaUser))]
+[RequireComponent(typeof(Animator), typeof(Damageable))]
 public abstract class ActorController : MonoBehaviour
 {
     [Header("Actor Components")]
@@ -17,7 +17,7 @@ public abstract class ActorController : MonoBehaviour
     public abstract void ReceiveDamage();
 
 
-    void Awake()
+    public void Awake()
     {
         anim = GetComponent<Animator>();
         health = GetComponent<Health>();

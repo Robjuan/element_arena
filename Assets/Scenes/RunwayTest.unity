@@ -2399,6 +2399,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 739230870378781390, guid: 99aff40f3c93eea4eaf473f85c4c09c6,
+        type: 3}
+      propertyPath: walkSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 739230870378781390, guid: 99aff40f3c93eea4eaf473f85c4c09c6,
+        type: 3}
+      propertyPath: runSpeed
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 739230870378781390, guid: 99aff40f3c93eea4eaf473f85c4c09c6,
+        type: 3}
+      propertyPath: sprintSpeed
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99aff40f3c93eea4eaf473f85c4c09c6, type: 3}
 --- !u!1001 &1848430554
@@ -3291,7 +3306,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base_Spider
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2451646144024986305, guid: a2ff9c945f4ef2b47a6acb6b6312b159, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a2ff9c945f4ef2b47a6acb6b6312b159, type: 3}
 --- !u!1001 &5105031325855792598
 PrefabInstance:

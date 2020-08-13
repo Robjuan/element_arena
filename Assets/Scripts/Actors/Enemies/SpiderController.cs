@@ -4,27 +4,17 @@ using UnityEngine;
 
 public class SpiderController : EnemyController
 {
-   
-    // todo: have the statecontroller handle attacking
-    protected void OnCollisionEnter(Collision coll)
+    public override void TryAttack(Collider other)
     {
-        var other = coll.gameObject;
-        // todo: let them damage each other?
-        // maybe with better nav and more varied attacks
-        if (other.tag == "Player")
+        Debug.Log("attacking");
+        anim.SetBool("Attack", true);
+        Damageable damageable = other.GetComponent<Damageable>();
+        if (damageable)
         {
-            if (anim)
-            {
-                anim.SetBool("Attack", true);
-            }
-
-            Damageable damageable = other.GetComponent<Damageable>();
-            if (damageable)
-            {
-                damageable.InflictDamage(touchDamage, this.gameObject);
-            }
+            damageable.InflictDamage(attackDamage, this.gameObject);
         }
     }
+
 
     protected void OnCollisionExit(Collision coll)
     {

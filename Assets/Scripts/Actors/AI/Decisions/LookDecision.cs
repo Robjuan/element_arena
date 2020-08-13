@@ -16,9 +16,9 @@ public class LookDecision : Decision
         // if something comes in the cone then raycast it to check for sure?
         RaycastHit hit;
 
-        Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.enemyStats.lookRange, Color.green);
+        Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.parent.lookRange, Color.green);
 
-        if(Physics.SphereCast(controller.eyes.position, controller.enemyStats.lookSphereCastRadius, controller.eyes.forward, out hit, controller.enemyStats.lookRange)
+        if(Physics.SphereCast(controller.eyes.position, controller.parent.lookSphereCastRadius, controller.eyes.forward, out hit, controller.parent.lookRange)
             && hit.collider.CompareTag("Player"))
         {
             controller.chaseTarget = hit.transform;
