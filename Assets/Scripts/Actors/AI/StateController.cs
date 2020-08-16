@@ -72,7 +72,6 @@ public class StateController : MonoBehaviour
         }
     }
 
-	/*
 	public bool CheckCountDownElapsed(float duration)
     {
 		stateTimeElapsed += Time.deltaTime;
@@ -83,5 +82,5 @@ public class StateController : MonoBehaviour
     {
 		stateTimeElapsed = 0;
     }
-	*/
+	
 }

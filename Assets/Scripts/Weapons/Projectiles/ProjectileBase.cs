@@ -5,7 +5,7 @@ using UnityEngine;
 // any actual projectile should inherit from this class
 
 public abstract class ProjectileBase : MonoBehaviour
-{   
+{
     [Header("Physics")]
     [Tooltip("Quadratic Drag Coefficient")]
     public float quadDragCoeff = 0.1f;
@@ -14,9 +14,14 @@ public abstract class ProjectileBase : MonoBehaviour
     [Tooltip("Density * Size = mass")]
     public float density;
 
-    public float shootForce;
+    public float shatterForce;
+    public float maxLifetime;
+    private float spawnTime;
 
-    public bool isPlaceholder = false; // for calcs & showing before instantiate
+    
+    [HideInInspector] public float shootForce; // set by modifier values
+
+    [HideInInspector] public bool isPlaceholder = false; // for calcs & showing before instantiate
 
     //public LayerMask layerMask = -1;
 
@@ -25,6 +30,7 @@ public abstract class ProjectileBase : MonoBehaviour
     protected Rigidbody rigidBody;
     protected Renderer innerSphereRend;
     protected Renderer outerSphereRend;
+    [Header("Thermals & Appearance")]
     public ThermalBody thermals;
     protected SphereCollider thisColl;
 
@@ -39,6 +45,7 @@ public abstract class ProjectileBase : MonoBehaviour
     protected Material inner_StartingMaterial;
     protected Material outer_StartingMaterial;
 
+    protected bool isDestroyed = false;
 
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
@@ -48,6 +55,8 @@ public abstract class ProjectileBase : MonoBehaviour
 
     public abstract float GetMassFromSize();
     public abstract float GetDamage(Collision coll);
+
+    public abstract void DestroyProjectile();
 
     protected void Awake()
     {
@@ -111,10 +120,11 @@ public abstract class ProjectileBase : MonoBehaviour
 
     protected void Update()
     {
-        //if (!isPlaceholder)
-        //{
-            UpdateThermalApperance();
-        //}
+        UpdateThermalApperance();
+        if ((spawnTime + maxLifetime <= Time.time) && !isDestroyed && !isPlaceholder)
+        {
+            DestroyProjectile();
+        }
     }
 
     public float GetRadius()
@@ -131,11 +141,20 @@ public abstract class ProjectileBase : MonoBehaviour
         {
             damageable.InflictDamage(GetDamage(coll), this.gameObject);
         }
+
+        var cp = coll.GetContact(0);
+        var collEnergy = Vector3.Dot(cp.normal, coll.relativeVelocity);
+        if (collEnergy >= shatterForce && !isDestroyed && !isPlaceholder)
+        {
+            Debug.Log("shattering with collenergy: " + collEnergy);
+            DestroyProjectile();
+        }
     }
 
 
     public void Shoot(Vector3 shotDirection)
     {
+        spawnTime = Time.time;
         initialPosition = transform.position;
         // forcemode allows control of continuous vs instant , and mass-affected vs not
         rigidBody.AddForce(shotDirection * shootForce, ForceMode.Impulse);

@@ -1,16 +1,24 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class EarthProjectile : ProjectileBase
 {
+    [Header("Earth Projectile Properties")]
+    // palette: https://www.color-hex.com/color-palette/3392
+    public Color ignitionColor = new Color32(191, 18, 0, 255);
+
+
+    [Header("Remnants")]
+    public GameObject[] small_possibleRemnantObjects;
+    public GameObject[] large_possibleRemnantObjects;
+
+    private GameObject largeRemnant;
+    private GameObject[] smallRemnants;
+
     private Vector3 lastLocalScale;
     private float lastTemp;
 
-    // palette: https://www.color-hex.com/color-palette/3392
-    //public Color underlay_MaxTemp = new Color32(255, 102, 0, 255);
-    //public Color underlay_MinTemp = new Color32(85, 51, 51, 255);
-    
-    public Color ignitionColor = new Color32(191, 18, 0, 255);
 
     public override float GetDamage(Collision coll)
     {
@@ -96,7 +104,6 @@ public class EarthProjectile : ProjectileBase
 
     public override void ApplyGravity()
     {
-        // apply gravity
         var globalDown = new Vector3(0,-1,0);
         Vector3 grav_force = gravity * globalDown * rigidBody.mass; 
         rigidBody.AddForce(grav_force);
@@ -104,9 +111,78 @@ public class EarthProjectile : ProjectileBase
 
     public override void ApplyDrag()
     {
-        // apply drag
         Vector3 drag_force = quadDragCoeff * -1 * rigidBody.velocity.normalized * rigidBody.velocity.magnitude; 
         rigidBody.AddForce(drag_force);
     }
-                       
+
+    public override void DestroyProjectile()
+    {
+        thisColl.enabled = false; // need to destroy or hide&disable coll first to stop interacting with rems
+        isDestroyed = true;
+        Debug.Log("firing destroy projectile");
+        // instantiate the leftover rocks
+        
+        largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)],
+                                    this.transform.position, this.transform.rotation);
+
+        // it seems to be spawing these rems from where the player is?? or something??
+
+
+        // start the checking of the rock settlements
+        StartCoroutine("SettleRemnants");
+
+        // play a particle effect
+
+        // actually destroying will break the coroutines
+        // potentially just make invis etc and then destroy at end of coroutine?
+        // object pooling may want otherwise
+        //Destroy(this.gameObject);
+    }
+
+    public IEnumerator SettleRemnants()
+    {
+        var allsettled = false;
+
+        var lrb = largeRemnant.GetComponent<Rigidbody>();
+        if (!lrb.isKinematic)
+        {
+            if(lrb.IsSleeping())
+            {
+                Debug.Log("setting kinem");
+                lrb.isKinematic = true;
+                allsettled = true;
+                
+            }
+        }
+
+        /*
+        foreach(GameObject go in smallRemnants)
+        {
+            Debug.Log("rem go = " + go);
+            var rb = go.GetComponent<Rigidbody>();
+            if(!rb.isKinematic)
+            {
+                if (rb.IsSleeping())
+                {
+                    Debug.Log("rb sleeping");
+                    rb.isKinematic = true;
+                    // this will not end the coroutine here, it will come back and check one more time, probably nbd.
+                }
+                else
+                {
+                    allsettled = false;
+                }
+                // if it's on the ground -> set kinematic
+                // else -> allsettled = false;
+            }
+        }
+        */
+        if (allsettled)
+        {
+            Debug.Log("ending coroutine");
+            yield break; // end the coroutine if everything is settled
+
+        }
+        yield return null; //new WaitForSeconds(0.1f);
+    }
 }

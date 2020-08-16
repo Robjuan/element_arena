@@ -18,6 +18,8 @@ public class EnemyController : ActorController
     [Header("Vision Stats")]
     public float lookRange;
     public float lookSphereCastRadius;
+    public float scanRotateSpeed;
+    public float searchDuration;
 
     [Header("Combat Stats")]
     public float attackDamage;

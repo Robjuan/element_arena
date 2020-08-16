@@ -32,8 +32,12 @@ public class SpiderController : EnemyController
     {
         // could check if the target is still within range here?
         Debug.Log("attack ending");
-        attackTarget.InflictDamage(attackDamage, this.gameObject);
-        attackTarget = null;
+        if (attackTarget != null) 
+        {
+            attackTarget.InflictDamage(attackDamage, this.gameObject);
+            attackTarget = null;
+        }
+        
     }
 
     protected void OnCollisionExit(Collision coll)

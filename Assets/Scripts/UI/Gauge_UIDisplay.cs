@@ -19,9 +19,13 @@ public class Gauge_UIDisplay : MonoBehaviour
     protected Image backgroundImage;
     protected GameObject secondarylimitObject;
 
-    void Start()
+    void Awake()
     {
         RegisterComponents();
+    }   
+
+    void Start()
+    {
         switch (modType)
         {
             case WeaponModifier.ModifierType.Force:
