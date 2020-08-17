@@ -117,13 +117,18 @@ public class EarthProjectile : ProjectileBase
 
     public override void DestroyProjectile()
     {
-        thisColl.enabled = false; // need to destroy or hide&disable coll first to stop interacting with rems
+        //thisColl.enabled = false; // need to destroy or hide&disable coll first to stop interacting with rems
         isDestroyed = true;
         Debug.Log("firing destroy projectile");
         // instantiate the leftover rocks
-        
+        Debug.Log("dp @: " + this.transform.position);
         largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)],
-                                    this.transform.position, this.transform.rotation);
+                                    //this.transform.position + (transform.up * radius),
+                                    new Vector3(4, 9, 3),
+                                    Quaternion.identity);
+        //largeRemnant.transform.localScale *= (radius * 0.4f);
+        largeRemnant.transform.localScale = new Vector3(200, 200, 200);
+        // scale the rock based on how big our projectile is at the time
 
         // it seems to be spawing these rems from where the player is?? or something??
 
@@ -141,48 +146,58 @@ public class EarthProjectile : ProjectileBase
 
     public IEnumerator SettleRemnants()
     {
-        var allsettled = false;
-
-        var lrb = largeRemnant.GetComponent<Rigidbody>();
-        if (!lrb.isKinematic)
+        for(; ; ) // loop forever because coroutine
         {
-            if(lrb.IsSleeping())
+            var allsettled = false;
+
+            var lrb = largeRemnant.GetComponent<Rigidbody>();
+            if (!lrb.isKinematic)
             {
-                Debug.Log("setting kinem");
-                lrb.isKinematic = true;
-                allsettled = true;
-                
-            }
-        }
+                Debug.Log("not kinem");
+                if (lrb.IsSleeping())
+                {
+                    Debug.Log("setting kinem");
+                    lrb.isKinematic = true;
+                    allsettled = true;
 
-        /*
-        foreach(GameObject go in smallRemnants)
-        {
-            Debug.Log("rem go = " + go);
-            var rb = go.GetComponent<Rigidbody>();
-            if(!rb.isKinematic)
+                }
+            }
+
+            /*
+            foreach(GameObject go in smallRemnants)
             {
-                if (rb.IsSleeping())
+                Debug.Log("rem go = " + go);
+                var rb = go.GetComponent<Rigidbody>();
+                if(!rb.isKinematic)
                 {
-                    Debug.Log("rb sleeping");
-                    rb.isKinematic = true;
-                    // this will not end the coroutine here, it will come back and check one more time, probably nbd.
+                    if (rb.IsSleeping())
+                    {
+                        Debug.Log("rb sleeping");
+                        rb.isKinematic = true;
+                        // this will not end the coroutine here, it will come back and check one more time, probably nbd.
+                    }
+                    else
+                    {
+                        allsettled = false;
+                    }
+                    // if it's on the ground -> set kinematic
+                    // else -> allsettled = false;
                 }
-                else
-                {
-                    allsettled = false;
-                }
-                // if it's on the ground -> set kinematic
-                // else -> allsettled = false;
             }
-        }
-        */
-        if (allsettled)
-        {
-            Debug.Log("ending coroutine");
-            yield break; // end the coroutine if everything is settled
+            */
+            if (allsettled)
+            {
+                Debug.Log("ending coroutine");
+                yield break; // end the coroutine if everything is settled
 
+            }
+            yield return null; //new WaitForSeconds(0.1f);
         }
-        yield return null; //new WaitForSeconds(0.1f);
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, radius*5f);
     }
 }
