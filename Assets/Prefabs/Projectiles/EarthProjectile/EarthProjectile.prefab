@@ -148,7 +148,7 @@ MonoBehaviour:
   effectScale: 0.3
   largeRemnantScale: 30.6
   smallRemnantScale: 10
-  smallRemnantCountFloor: 0
+  smallRemnantCountFloor: 2
   smallRemnantCountCeiling: 10
   smallRemScatterRadius: 1.67
   small_possibleRemnantObjects:

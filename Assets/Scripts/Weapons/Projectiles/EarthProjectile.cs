@@ -162,6 +162,8 @@ public class EarthProjectile : ProjectileBase
         // this scaling number is set for aesthetics
         largeRemnant.transform.localScale = transform.localScale * largeRemnantScale;
         // choose how many small rems to spawn
+        // todo: more / less rems based on how big we are
+        // todo: the more rems there are the smaller each should be (within a range)
         var smallRemCount = UnityEngine.Random.Range(smallRemnantCountFloor, smallRemnantCountCeiling);
 
         for (int i = 0; i < smallRemCount; i++)
