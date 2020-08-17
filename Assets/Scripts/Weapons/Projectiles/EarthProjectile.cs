@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class EarthProjectile : ProjectileBase
 {
@@ -15,11 +17,15 @@ public class EarthProjectile : ProjectileBase
     [Range(0.05f, 1f)] public float effectScale = 0.3f; 
     [Tooltip("not a percentage, relative model scale determines. ~35 is good default")]
     [Range(20, 100)] public float largeRemnantScale = 38f;
+    [Range(5, 50)] public float smallRemnantScale = 10f;
+    [Tooltip("Random number of small rems in this range")]
+    public int smallRemnantCountFloor = 0;
+    public int smallRemnantCountCeiling = 10;
     public GameObject[] small_possibleRemnantObjects;
     public GameObject[] large_possibleRemnantObjects;
 
     private GameObject largeRemnant;
-    private GameObject[] smallRemnants;
+    private List<GameObject> smallRemnants = new List<GameObject>();
 
     private Vector3 lastLocalScale;
     private float lastTemp;
@@ -141,16 +147,27 @@ public class EarthProjectile : ProjectileBase
         {
             effect = Instantiate(shatterEffect, transform.position, transform.rotation);
         }
+        effect.transform.localScale = transform.localScale * effectScale;
+
 
         // instantiate the leftover rocks
-        largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)],
-                                    transform.position,// + (Vector3.up*GetRadius()),
-                                    Quaternion.identity);
+        largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)], transform.position, transform.rotation);
+            // todo: add force?
 
         // at projectile localscale = 1, rock filling most of projectile is localscale = 31
         // this scaling number is set for aesthetics
         largeRemnant.transform.localScale = transform.localScale * largeRemnantScale;
-        effect.transform.localScale = transform.localScale * effectScale;
+
+        var smallRemCount = UnityEngine.Random.Range(smallRemnantCountFloor, smallRemnantCountCeiling);
+        for (int i = 0; i < smallRemCount; i++)
+        {
+            var remselected = UnityEngine.Random.Range(0, small_possibleRemnantObjects.Length);
+            var newsmallrem = Instantiate(small_possibleRemnantObjects[remselected], transform.position, transform.rotation);
+            newsmallrem.transform.localScale = transform.localScale * smallRemnantScale;
+            // todo: add force
+            Debug.Log(smallRemnants);
+            smallRemnants.Add(newsmallrem);
+        }
 
         // start the checking of the rock settlements
         StartCoroutine("SettleRemnants");
@@ -160,7 +177,7 @@ public class EarthProjectile : ProjectileBase
     {
         for(; ; ) // loop forever because coroutine
         {
-            var allsettled = false;
+            var largeSettled = false;
 
             var lrb = largeRemnant.GetComponent<Rigidbody>();
             if (!lrb.isKinematic)
@@ -168,34 +185,31 @@ public class EarthProjectile : ProjectileBase
                 if (lrb.IsSleeping())
                 {
                     lrb.isKinematic = true;
-                    allsettled = true;
-
+                    largeSettled = true;
                 }
             }
 
-            /*
-            foreach(GameObject go in smallRemnants)
+            var allSmallSettled = true;
+            Debug.Log("small rems in settle" + smallRemnants);
+            foreach (GameObject go in smallRemnants)
             {
-                Debug.Log("rem go = " + go);
                 var rb = go.GetComponent<Rigidbody>();
                 if(!rb.isKinematic)
                 {
                     if (rb.IsSleeping())
                     {
-                        Debug.Log("rb sleeping");
+                        Debug.Log("small rem sleeping");
                         rb.isKinematic = true;
                         // this will not end the coroutine here, it will come back and check one more time, probably nbd.
                     }
                     else
                     {
-                        allsettled = false;
+                        allSmallSettled = false;
                     }
-                    // if it's on the ground -> set kinematic
-                    // else -> allsettled = false;
                 }
             }
-            */
-            if (allsettled)
+
+            if (largeSettled && allSmallSettled)
             {
                 this.gameObject.SetActive(false);
                 yield break; // end the coroutine if everything is settled
