@@ -35,7 +35,7 @@ public abstract class ProjectileBase : MonoBehaviour
     protected SphereCollider thisColl;
 
     protected Vector3 lastPosition;
-    protected float radius;
+    private float radius;
 
     protected GameObject innerSphere;
 

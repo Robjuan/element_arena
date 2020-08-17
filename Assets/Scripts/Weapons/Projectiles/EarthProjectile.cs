@@ -10,6 +10,11 @@ public class EarthProjectile : ProjectileBase
 
 
     [Header("Remnants")]
+    public GameObject shatterEffect;
+    public GameObject explosionEffect;
+    [Range(0.05f, 1f)] public float effectScale = 0.3f; 
+    [Tooltip("not a percentage, relative model scale determines. ~35 is good default")]
+    [Range(20, 100)] public float largeRemnantScale = 38f;
     public GameObject[] small_possibleRemnantObjects;
     public GameObject[] large_possibleRemnantObjects;
 
@@ -117,31 +122,38 @@ public class EarthProjectile : ProjectileBase
 
     public override void DestroyProjectile()
     {
-        //thisColl.enabled = false; // need to destroy or hide&disable coll first to stop interacting with rems
         isDestroyed = true;
-        Debug.Log("firing destroy projectile");
+
+        // hide / remove the existing projectile
+        // we will only setinactive when the coroutine is finished
+        // object pooling may warrant something different here, like the coroutine to be managed by one of the remnants themselves
+        outerSphereRend.enabled = false;
+        innerSphereRend.enabled = false;
+        thisColl.enabled = false;
+
+
+        // fire the effect
+        GameObject effect;
+        if (thermals.isIgnited())
+        {
+            effect = Instantiate(explosionEffect, transform.position, transform.rotation);
+        } else
+        {
+            effect = Instantiate(shatterEffect, transform.position, transform.rotation);
+        }
+
         // instantiate the leftover rocks
-        Debug.Log("dp @: " + this.transform.position);
         largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)],
-                                    //this.transform.position + (transform.up * radius),
-                                    new Vector3(4, 9, 3),
+                                    transform.position,// + (Vector3.up*GetRadius()),
                                     Quaternion.identity);
-        //largeRemnant.transform.localScale *= (radius * 0.4f);
-        largeRemnant.transform.localScale = new Vector3(200, 200, 200);
-        // scale the rock based on how big our projectile is at the time
 
-        // it seems to be spawing these rems from where the player is?? or something??
-
+        // at projectile localscale = 1, rock filling most of projectile is localscale = 31
+        // this scaling number is set for aesthetics
+        largeRemnant.transform.localScale = transform.localScale * largeRemnantScale;
+        effect.transform.localScale = transform.localScale * effectScale;
 
         // start the checking of the rock settlements
         StartCoroutine("SettleRemnants");
-
-        // play a particle effect
-
-        // actually destroying will break the coroutines
-        // potentially just make invis etc and then destroy at end of coroutine?
-        // object pooling may want otherwise
-        //Destroy(this.gameObject);
     }
 
     public IEnumerator SettleRemnants()
@@ -153,10 +165,8 @@ public class EarthProjectile : ProjectileBase
             var lrb = largeRemnant.GetComponent<Rigidbody>();
             if (!lrb.isKinematic)
             {
-                Debug.Log("not kinem");
                 if (lrb.IsSleeping())
                 {
-                    Debug.Log("setting kinem");
                     lrb.isKinematic = true;
                     allsettled = true;
 
@@ -187,17 +197,11 @@ public class EarthProjectile : ProjectileBase
             */
             if (allsettled)
             {
-                Debug.Log("ending coroutine");
+                this.gameObject.SetActive(false);
                 yield break; // end the coroutine if everything is settled
 
             }
             yield return null; //new WaitForSeconds(0.1f);
         }
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, radius*5f);
     }
 }
