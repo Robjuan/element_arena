@@ -145,7 +145,12 @@ MonoBehaviour:
     type: 3}
   explosionEffect: {fileID: 3059977269702245847, guid: 3fbad1274005c4f47b2dc6fd5b2e5e98,
     type: 3}
-  largeRemnantScale: 38
+  effectScale: 0.3
+  largeRemnantScale: 32.1
+  smallRemnantScale: 7.8
+  smallRemnantCountFloor: 0
+  smallRemnantCountCeiling: 10
+  smallRemScatterRadius: 2.39
   small_possibleRemnantObjects:
   - {fileID: 4689261061990573958, guid: 07c26f4a8af7f8849ba7668fbb8a02a1, type: 3}
   - {fileID: 793363408592489962, guid: 34c3874ead0aeb9458f05cca29b46cdb, type: 3}

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 public class EarthProjectile : ProjectileBase
 {
@@ -21,6 +22,7 @@ public class EarthProjectile : ProjectileBase
     [Tooltip("Random number of small rems in this range")]
     public int smallRemnantCountFloor = 0;
     public int smallRemnantCountCeiling = 10;
+    [Range(1, 10)] public float smallRemScatterRadius = 2f;
     public GameObject[] small_possibleRemnantObjects;
     public GameObject[] large_possibleRemnantObjects;
 
@@ -129,43 +131,57 @@ public class EarthProjectile : ProjectileBase
     public override void DestroyProjectile()
     {
         isDestroyed = true;
+        Vector3 spawnposition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // hide / remove the existing projectile
         // we will only setinactive when the coroutine is finished
         // object pooling may warrant something different here, like the coroutine to be managed by one of the remnants themselves
         outerSphereRend.enabled = false;
         innerSphereRend.enabled = false;
-        thisColl.enabled = false;
+        //thisColl.enabled = false;
 
 
         // fire the effect
         GameObject effect;
         if (thermals.isIgnited())
         {
-            effect = Instantiate(explosionEffect, transform.position, transform.rotation);
+            effect = Instantiate(explosionEffect, spawnposition, transform.rotation);
         } else
         {
-            effect = Instantiate(shatterEffect, transform.position, transform.rotation);
+            effect = Instantiate(shatterEffect, spawnposition, transform.rotation);
         }
         effect.transform.localScale = transform.localScale * effectScale;
 
 
         // instantiate the leftover rocks
-        largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)], transform.position, transform.rotation);
+        largeRemnant = Instantiate(large_possibleRemnantObjects[UnityEngine.Random.Range(0, large_possibleRemnantObjects.Length)], spawnposition, transform.rotation);
             // todo: add force?
 
         // at projectile localscale = 1, rock filling most of projectile is localscale = 31
         // this scaling number is set for aesthetics
         largeRemnant.transform.localScale = transform.localScale * largeRemnantScale;
 
+        // choose how many small rems to spawn
         var smallRemCount = UnityEngine.Random.Range(smallRemnantCountFloor, smallRemnantCountCeiling);
+
         for (int i = 0; i < smallRemCount; i++)
         {
+            // randomly select one from the list of possibles
             var remselected = UnityEngine.Random.Range(0, small_possibleRemnantObjects.Length);
-            var newsmallrem = Instantiate(small_possibleRemnantObjects[remselected], transform.position, transform.rotation);
+            // spawn it where we exploded
+            var newsmallrem = Instantiate(small_possibleRemnantObjects[remselected], spawnposition, transform.rotation);
+
+            // randomly place it on a sphere of radius rad
+            var rad = smallRemScatterRadius;// + largeRemnant.GetComponent<Collider>().bounds.extents.magnitude;
+            var centre = spawnposition;
+            Vector3 spherePos = (UnityEngine.Random.onUnitSphere * rad) + centre;
+            newsmallrem.transform.position = spherePos;
+            // scale the small rem
             newsmallrem.transform.localScale = transform.localScale * smallRemnantScale;
-            // todo: add force
-            Debug.Log(smallRemnants);
+            
+                // todo: add force?
+
+            // keep track of all smallrems for settling
             smallRemnants.Add(newsmallrem);
         }
 
@@ -190,7 +206,6 @@ public class EarthProjectile : ProjectileBase
             }
 
             var allSmallSettled = true;
-            Debug.Log("small rems in settle" + smallRemnants);
             foreach (GameObject go in smallRemnants)
             {
                 var rb = go.GetComponent<Rigidbody>();
@@ -198,7 +213,6 @@ public class EarthProjectile : ProjectileBase
                 {
                     if (rb.IsSleeping())
                     {
-                        Debug.Log("small rem sleeping");
                         rb.isKinematic = true;
                         // this will not end the coroutine here, it will come back and check one more time, probably nbd.
                     }
@@ -217,5 +231,11 @@ public class EarthProjectile : ProjectileBase
             }
             yield return null; //new WaitForSeconds(0.1f);
         }
+
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, GetRadius());
     }
 }
