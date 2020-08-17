@@ -24,6 +24,7 @@ public class EarthProjectile : ProjectileBase
     public int smallRemnantCountCeiling = 10;
     [Range(1, 10)] public float smallRemScatterRadius = 2f;
     public GameObject[] small_possibleRemnantObjects;
+    
     public GameObject[] large_possibleRemnantObjects;
 
     private GameObject largeRemnant;
@@ -138,7 +139,7 @@ public class EarthProjectile : ProjectileBase
         // object pooling may warrant something different here, like the coroutine to be managed by one of the remnants themselves
         outerSphereRend.enabled = false;
         innerSphereRend.enabled = false;
-        //thisColl.enabled = false;
+        thisColl.enabled = false;
 
 
         // fire the effect
@@ -160,7 +161,6 @@ public class EarthProjectile : ProjectileBase
         // at projectile localscale = 1, rock filling most of projectile is localscale = 31
         // this scaling number is set for aesthetics
         largeRemnant.transform.localScale = transform.localScale * largeRemnantScale;
-
         // choose how many small rems to spawn
         var smallRemCount = UnityEngine.Random.Range(smallRemnantCountFloor, smallRemnantCountCeiling);
 
@@ -184,7 +184,7 @@ public class EarthProjectile : ProjectileBase
             // keep track of all smallrems for settling
             smallRemnants.Add(newsmallrem);
         }
-
+        
         // start the checking of the rock settlements
         StartCoroutine("SettleRemnants");
     }
@@ -222,7 +222,7 @@ public class EarthProjectile : ProjectileBase
                     }
                 }
             }
-
+            
             if (largeSettled && allSmallSettled)
             {
                 this.gameObject.SetActive(false);
@@ -236,6 +236,11 @@ public class EarthProjectile : ProjectileBase
 
     public void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, GetRadius());
+        try
+        {
+            Gizmos.DrawWireSphere(transform.position, GetRadius());
+        }
+        catch { }   
+        
     }
 }
