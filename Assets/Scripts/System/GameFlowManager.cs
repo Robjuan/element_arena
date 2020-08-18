@@ -4,17 +4,35 @@ using UnityEngine;
 
 public class GameFlowManager : MonoBehaviour
 {
-    public int spawnersToDefeat;
-    public EnemySpawner[] allSpawners;
+    public List<Objective> objectives;
+    private List<Objective> activeObjectives;
 
-    private int currentAliveSpawners;
-
+    private bool playerWin;
+   
     void Start()
     {
         GameEvents.current.onActorDeath += HandleActorDeath;
-        GameEvents.current.onSpawnerEmpty += CheckSpawnerCount;
+        activeObjectives = new List<Objective>(objectives);
+}
 
-        currentAliveSpawners = allSpawners.Length;
+    void Update()
+    {
+        if (activeObjectives.Count > 0)
+        {
+            // iterate list in reverse to allow removing
+            for (int i = activeObjectives.Count - 1; i >= 0; i--)
+            {
+                if(activeObjectives[i].IsCompleted())
+                {
+                    activeObjectives[i].Complete();
+                    activeObjectives.RemoveAt(i);
+                }
+            }
+        } else
+        {
+            Debug.Log("you completed all objectives and won!!");
+            Invoke("LoadScene", 2f);
+        }
     }
 
     void LoadScene()
@@ -33,14 +51,6 @@ public class GameFlowManager : MonoBehaviour
         //Debug.Log(deadActor + " has died");
     }
 
-    void CheckSpawnerCount(GameObject deadSpawner)
-    {
-        currentAliveSpawners -= 1;
-        if (currentAliveSpawners < spawnersToDefeat)
-        {
-            Debug.Log("You have won!!");
-            Invoke("LoadScene", 1f);
-        }
-    }
+
 
 }

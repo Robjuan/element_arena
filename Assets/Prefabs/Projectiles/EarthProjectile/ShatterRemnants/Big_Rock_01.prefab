@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3625304284722002023}
   - component: {fileID: 728953106729997992}
   - component: {fileID: 6394287040815905324}
+  - component: {fileID: 8606828716187954663}
   m_Layer: 11
   m_Name: Big_Rock_01
   m_TagString: Untagged
@@ -111,3 +112,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!208 &8606828716187954663
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976694061204887986}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.008, y: 0.008, z: 0.009000001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.001, y: -0.001, z: 0}
+  m_TimeToStationary: 0.5
