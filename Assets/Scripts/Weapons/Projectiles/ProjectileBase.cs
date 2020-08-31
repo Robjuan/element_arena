@@ -4,7 +4,7 @@ using UnityEngine;
 // projectiles are not designed to use regular gravity, instead implement their own drag/gravity/mass etc
 // any actual projectile should inherit from this class
 
-public abstract class ProjectileBase : MonoBehaviour
+public abstract class ProjectileBase : MonoBehaviour, IPooledObject
 {
     [Header("Physics")]
     [Tooltip("Quadratic Drag Coefficient")]
@@ -80,19 +80,23 @@ public abstract class ProjectileBase : MonoBehaviour
         }
     }
 
-    protected void Start()
+    public void OnObjectSpawn() 
     {
+        // todo: should reset itself, not objectpooler
+    }
+
+    public void Start()
+    {
+
         if (isPlaceholder)
         {
             innerSphereRend.material = inner_TransparentMaterial;
             outerSphereRend.material = outer_TransparentMaterial;
+
             UpdateTransparency(1);
 
             // no collisions
             thisColl.enabled = false;
-
-            // saves processing - will our scaling/radius etc still work?
-            //rigidBody.Sleep();
         }
     }
 

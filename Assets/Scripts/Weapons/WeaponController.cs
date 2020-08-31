@@ -26,7 +26,8 @@ public class WeaponController : MonoBehaviour
     public WeaponModifierManager weaponModifierManager;
 
     [Tooltip("The projectile prefab")]
-    public ProjectileBase projectilePrefab;
+    public string projectilePrefabTag;
+    private ProjectileBase placeholderProjectilePrefab;
     private ProjectileBase placeholderProjectile;
 
     [Tooltip("Delay between fires")]
@@ -105,7 +106,7 @@ public class WeaponController : MonoBehaviour
                         newest_mass = placeholderProjectile.GetMassFromSize();
                     } else
                     {
-                        var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
+                        var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefabTag, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
                         newest_mass = testProj.GetMassFromSize();
                         Destroy(testProj.gameObject);
                     }
@@ -156,9 +157,9 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, ProjectileBase prefab, Vector3 position, Quaternion rot)
+    public ProjectileBase CreateModifiedProjectile(WeaponModifierManager modman, string prefabtag, Vector3 position, Quaternion rot)
     {
-        ProjectileBase newProjectile = Instantiate(prefab, position, rot);
+        ProjectileBase newProjectile = ObjectPooler.current.SpawnFromPool(prefabtag, position, rot).GetComponent<ProjectileBase>();
         modman.ApplyModifiers(newProjectile);
         return newProjectile;
     }
@@ -189,9 +190,14 @@ public class WeaponController : MonoBehaviour
 
     private void UpdatePlaceholder()
     {
+        if (placeholderProjectilePrefab == null)
+        {
+            placeholderProjectilePrefab = ObjectPooler.current.GetPoolPrefab(projectilePrefabTag).GetComponent<ProjectileBase>();
+        }    
         if (!placeholderProjectile && isActiveWeapon)
         {
-            placeholderProjectile = Instantiate(projectilePrefab, projectileSpawnPosition, Quaternion.LookRotation(GetShotDirection()));
+            placeholderProjectile = Instantiate(placeholderProjectilePrefab, projectileSpawnPosition, Quaternion.LookRotation(GetShotDirection()));
+            // placeholderProjectile.GetComponent<Rigidbody>().angularVelocity = Vector3.zero; // slowly rotate ?
             placeholderProjectile.isPlaceholder = true;
         }
 
@@ -247,7 +253,7 @@ public class WeaponController : MonoBehaviour
             //Vector3 adjustedSpawnPoint = player.transform.position + 
             
             Vector3 shotDirection = GetShotDirection();             
-            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefab, projectileSpawnPosition, Quaternion.LookRotation(shotDirection));
+            var newproj = CreateModifiedProjectile(weaponModifierManager, projectilePrefabTag, projectileSpawnPosition, Quaternion.LookRotation(shotDirection));
             newproj.Shoot(shotDirection);
             m_LastTimeShot = Time.time;
 

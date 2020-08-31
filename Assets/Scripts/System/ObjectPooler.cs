@@ -44,6 +44,26 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
+    public GameObject GetPoolPrefab(string tag)
+    {
+        if (!poolDictionary.ContainsKey(tag))
+        {
+            Debug.LogWarning("Pool with tag" + tag + "does not exist.");
+            return null;
+        } else
+        {
+            foreach(Pool pool in pools)
+            {
+                if(tag == pool.tag)
+                {
+                    return pool.prefab;
+                }
+            }
+            Debug.LogWarning("Pool with tag" + tag + "not found in pools.");
+            return null;
+        }
+    }
+
     public GameObject SpawnFromPool (string tag, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(tag))

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScene.unity
     guid: 5b02810727c5dd84ab25ce59d125ca39
   - enabled: 1
+    path: Assets/Scenes/SimpleEncountersScene.unity
+    guid: ec114a4e638296b44a3f64b02b8ce742
+  - enabled: 0
     path: Assets/Scenes/RunwayTest.unity
     guid: ead0f8ddba444f848b48bb8004dd7d59
   - enabled: 0

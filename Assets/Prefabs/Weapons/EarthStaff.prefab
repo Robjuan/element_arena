@@ -95,8 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponModifierManager: {fileID: 3068440592632169310}
-  projectilePrefab: {fileID: 6641836871046021668, guid: 278d878626d767940a7ef6226452a9e8,
-    type: 3}
+  projectilePrefabTag: EarthProjectile
   shotDelay: 0.8
   manaScale: 1
   placeholderFadeTime: 2
