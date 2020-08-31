@@ -11,6 +11,8 @@ public abstract class ActorController : MonoBehaviour
     [HideInInspector] public Damageable damage;
     [HideInInspector] public ManaUser mana;
 
+    public GameObject onDeathParticleEffect;
+
     public abstract bool IsAlive { get; set; }
     
     public abstract void Die();
