@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.XR.WSA.Input;
 
 [RequireComponent(typeof(StateController), typeof(NavMeshAgent))]
 public class EnemyController : ActorController
