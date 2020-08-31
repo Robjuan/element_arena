@@ -93,12 +93,9 @@ public class EarthProjectile : ProjectileBase
             // only start glowing when we get hot
             if (thermals.isIgnited())
             {
-                // these are inspector values but don't match the actual color values
-                //float emission_min = 7.3f;
-                //float emission_max = 10f;
-
-                float emission_min = 1f;
-                float emission_max = 500f;
+                //inspector values are off
+                float emission_min = 5f;
+                float emission_max = 10f;
 
                 float intensity = HelperFunctions.ScaleToRange(thermals.Temperature, temp_max, temp_min, emission_max, emission_min);
                                

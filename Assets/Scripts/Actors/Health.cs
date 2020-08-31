@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
         
     [Tooltip("Maximum amount of health")]
     public float maxHealth = 10f;
+
+    public Slider worldVisibleHealthBar;
 
     private ActorController parent;
     private bool isDead;
@@ -22,6 +25,20 @@ public class Health : MonoBehaviour
         {
             GameEvents.current.HealthChange(currentHealth);
         }
+        if(worldVisibleHealthBar != null)
+        {
+            worldVisibleHealthBar.maxValue = maxHealth;
+            worldVisibleHealthBar.value = currentHealth;
+        }
+
+    }
+
+    private void UpdateVisibleHealthBar(float value)
+    {
+        if(worldVisibleHealthBar != null)
+        {
+            worldVisibleHealthBar.value = value;
+        }
     }
 
     public void Heal(float healAmount)
@@ -29,6 +46,7 @@ public class Health : MonoBehaviour
         float healthBefore = currentHealth;
         currentHealth += healAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        UpdateVisibleHealthBar(currentHealth);
     }
 
     public void TakeDamage(float damage, GameObject damageSource)
@@ -40,7 +58,7 @@ public class Health : MonoBehaviour
         if (this.gameObject.tag == "Player"){
             GameEvents.current.HealthChange(currentHealth);
         }
-
+        UpdateVisibleHealthBar(currentHealth);
         HandleDeath();
     }
 
@@ -66,6 +84,14 @@ public class Health : MonoBehaviour
                 GameEvents.current.ActorDeath(this.gameObject);
             }
             isDead = true;
+        }
+    }
+
+    void Update()
+    {
+        if (worldVisibleHealthBar != null)
+        {
+            worldVisibleHealthBar.transform.LookAt(Camera.main.transform);
         }
     }
 }
