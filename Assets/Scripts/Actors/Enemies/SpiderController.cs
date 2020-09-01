@@ -30,7 +30,9 @@ public class SpiderController : EnemyController
     // called by the animator on attack animation ends
     public void AttackEnd()
     {
-        // could check if the target is still within range here?
+        // need to check if target is still in range
+        // raycast directly at target, if target is first hit and = player, then deal damage
+
         Debug.Log("attack ending");
         if (attackTarget != null) 
         {
@@ -40,12 +42,19 @@ public class SpiderController : EnemyController
         
     }
 
-    protected void OnCollisionExit(Collision coll)
+    // called by the animator on die animation end
+    public void DieParticle()
     {
-        if (anim)
+        if (onDeathParticleEffect != null)
         {
-            anim.SetBool("Attack", false);
+            Instantiate(onDeathParticleEffect, transform.position, transform.rotation);
         }
+    }
+
+    public void DieEnd()
+    {
+        // this might break boss stuff?
+        Destroy(this.gameObject);
     }
 
 }

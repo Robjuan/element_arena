@@ -52,10 +52,6 @@ public class EnemyController : ActorController
             anim.SetTrigger("Die");
             //this.GetComponent<BoxCollider>().enabled = false;
             //Destroy(this.gameObject, 2f);
-            if (onDeathParticleEffect != null)
-            {
-                Instantiate(onDeathParticleEffect, transform.position, transform.rotation);
-            }
         }
     }
 

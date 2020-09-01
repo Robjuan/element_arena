@@ -721,6 +721,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 0}
+  warningColor: {r: 0, g: 0, b: 0, a: 0}
   m_thisDisplayTarget: Force
 --- !u!1 &2406770258107722389
 GameObject:
@@ -963,6 +965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 0}
+  warningColor: {r: 0, g: 0, b: 0, a: 0}
   m_thisDisplayTarget: InitialVelocity
 --- !u!114 &612672220704331899
 MonoBehaviour:
@@ -1405,6 +1409,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 0}
+  warningColor: {r: 0, g: 0, b: 0, a: 0}
   m_thisDisplayTarget: Temperature
 --- !u!1 &4920501724539631698
 GameObject:
@@ -2808,6 +2814,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 7709736890578400124}
+  warningColor: {r: 1, g: 0.009412685, b: 0, a: 1}
   m_thisDisplayTarget: Health
 --- !u!1 &7869167905925621677
 GameObject:
@@ -2974,6 +2982,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 0}
+  warningColor: {r: 0, g: 0, b: 0, a: 0}
   m_thisDisplayTarget: Size
 --- !u!1 &8484699447301605648
 GameObject:
@@ -3140,6 +3150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e35ab5b76558dae45a85a9791cfd83ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColorImage: {fileID: 0}
+  warningColor: {r: 0, g: 0, b: 0, a: 0}
   m_thisDisplayTarget: Mass
 --- !u!1001 &6243660400531605995
 PrefabInstance:

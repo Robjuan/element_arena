@@ -475,6 +475,8 @@ MonoBehaviour:
   health: {fileID: 0}
   damage: {fileID: 0}
   mana: {fileID: 0}
+  onDeathParticleEffect: {fileID: 7434334858773442458, guid: 44ec9d8c13c375f4c9774c1f9110c05f,
+    type: 3}
   aiSateController: {fileID: 0}
   navMeshAgent: {fileID: 0}
   lookRange: 40
