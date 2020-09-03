@@ -11,6 +11,7 @@ public class EarthProjectile : ProjectileBase
     // palette: https://www.color-hex.com/color-palette/3392
     public Color ignitionColor = new Color32(191, 18, 0, 255);
 
+    public float damageScale;
 
     [Header("Remnants")]
     public GameObject shatterEffect;
@@ -41,7 +42,8 @@ public class EarthProjectile : ProjectileBase
 
         var cp = coll.GetContact(0);
         var collEnergy = Vector3.Dot(cp.normal,coll.relativeVelocity);
-        return collEnergy * rigidBody.mass * thermals.Temperature;
+        Debug.Log("colliding for damage: " + (collEnergy * rigidBody.mass * thermals.Temperature * damageScale));
+        return collEnergy * rigidBody.mass * thermals.Temperature * damageScale;
     }
 
     public override float GetMassFromSize()
@@ -239,7 +241,10 @@ public class EarthProjectile : ProjectileBase
         {
             Gizmos.DrawWireSphere(transform.position, GetRadius());
         }
-        catch { }   
+        catch 
+        {
+            Debug.Log("can't draw gizmo?");
+        }   
         
     }
 }

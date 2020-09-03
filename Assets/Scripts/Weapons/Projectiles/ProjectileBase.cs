@@ -72,17 +72,30 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
                 innerSphereRend = child.GetComponent<Renderer>();
                 inner_StartingMaterial = innerSphereRend.material;
 
-            } else if (child.tag == "Projectile_OuterSphere")
+            }
+            else if (child.tag == "Projectile_OuterSphere")
             {
                 outerSphereRend = child.GetComponent<Renderer>();
-                outer_StartingMaterial = innerSphereRend.material;
+                outer_StartingMaterial = outerSphereRend.material;
             }
         }
     }
 
+    private void ResetMaterials()
+    {
+        innerSphereRend.material = inner_StartingMaterial;
+        outerSphereRend.material = outer_StartingMaterial;
+    }
+
     public void OnObjectSpawn() 
     {
-        // todo: should reset itself, not objectpooler
+        ResetMaterials();
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+        isDestroyed = false;
+        outerSphereRend.enabled = true;
+        innerSphereRend.enabled = true;
+        thisColl.enabled = true;
     }
 
     public void Start()

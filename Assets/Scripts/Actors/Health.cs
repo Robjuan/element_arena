@@ -72,7 +72,7 @@ public class Health : MonoBehaviour
     {
         if (currentHealth <= 0f && !isDead)
         {
-            Debug.Log("Dying actor: " + this.gameObject);
+            //Debug.Log("Dying actor: " + this.gameObject);
             if (parent)
             {
                 parent.Die();

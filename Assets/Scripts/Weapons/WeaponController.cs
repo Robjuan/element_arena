@@ -112,7 +112,7 @@ public class WeaponController : MonoBehaviour
                     {
                         var testProj = CreateModifiedProjectile(weaponModifierManager, projectilePrefabTag, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
                         newest_mass = testProj.GetMassFromSize();
-                        Destroy(testProj.gameObject);
+                        testProj.gameObject.SetActive(false);
                     }
                     last_sizemod = weaponModifierManager.GetWeaponModifier(WeaponModifier.ModifierType.Size).modifierValue;
                 }

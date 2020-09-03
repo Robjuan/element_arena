@@ -75,18 +75,12 @@ public class ObjectPooler : MonoBehaviour
         objToSpawn.SetActive(true);
         objToSpawn.transform.position = position;
         objToSpawn.transform.rotation = rotation;
-
-        var rb = objToSpawn.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
         
         IPooledObject pooledObj = objToSpawn.GetComponent<IPooledObject>();
 
         if (pooledObj != null)
         {
+            // anything other than position & rotation needs to be reset by the object itself.
             pooledObj.OnObjectSpawn();
         }
 
