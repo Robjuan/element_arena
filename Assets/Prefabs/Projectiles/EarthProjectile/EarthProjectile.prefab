@@ -141,7 +141,7 @@ MonoBehaviour:
   outer_TransparentMaterial: {fileID: 2100000, guid: b6ffb09012bb00b4083571762a5a6e8d,
     type: 2}
   ignitionColor: {r: 1, g: 0, b: 0, a: 1}
-  damageScale: 0.001
+  damageScale: 0.002
   shatterEffect: {fileID: 7643079605933867408, guid: 5f3543a3abb3104489cf41af7f5ba3fe,
     type: 3}
   explosionEffect: {fileID: 3059977269702245847, guid: 3fbad1274005c4f47b2dc6fd5b2e5e98,

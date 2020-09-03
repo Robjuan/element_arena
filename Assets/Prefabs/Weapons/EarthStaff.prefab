@@ -207,7 +207,7 @@ MonoBehaviour:
   modifierName: Force
   modifierType: 2
   modifierValue: 2
-  modifierScale: 200
+  modifierScale: 60
   modifierActive: 1
   modifierButton: Modifier 2
 --- !u!114 &2822429469840747264
