@@ -65,22 +65,27 @@ public class Number_UIDisplay : MonoBehaviour
     // weaponmods use this overload
     private void UpdateNumberDisplay(Dictionary<WeaponModifier.ModifierType, float> modDict)
     {
-        if(modTarget != null)
+        if (modTarget != null)
         {
             m_SelfTMP.SetText(modDict[(WeaponModifier.ModifierType)modTarget].ToString());
         }
     }
-
+    
     void Update()
     {
         // this will set the color every frame - potentially not great performance
-        if (lastWarningTime + warningDuration > Time.time)
+        if(backgroundColorImage != null)
         {
-            backgroundColorImage.color = warningColor;
-        } else
-        {
-            backgroundColorImage.color = baseColor;
+            if (lastWarningTime + warningDuration > Time.time)
+            {
+                backgroundColorImage.color = warningColor;
+            }
+            else
+            {
+                backgroundColorImage.color = baseColor;
+            }
         }
     }
+    
 
 }
