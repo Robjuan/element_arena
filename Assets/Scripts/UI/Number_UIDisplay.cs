@@ -9,7 +9,9 @@ public class Number_UIDisplay : MonoBehaviour
 {
     public Image backgroundColorImage;
     public Color warningColor;
+    public float warningDuration;
     private Color baseColor;
+    private float lastWarningTime;
 
     [Tooltip("(Case Sensitive) Match to ModiferType or OutputType")]
     public string m_thisDisplayTarget;
@@ -20,6 +22,7 @@ public class Number_UIDisplay : MonoBehaviour
 
     void Start()
     {
+        lastWarningTime = Mathf.NegativeInfinity;
         baseColor = backgroundColorImage.color;
 
         m_SelfTMP = gameObject.GetComponent<TextMeshProUGUI>();
@@ -54,19 +57,9 @@ public class Number_UIDisplay : MonoBehaviour
     private void UpdateNumberDisplay(float newVal)
     {
         m_SelfTMP.SetText(newVal.ToString());
-        StartCoroutine("FlashWarningColor");
+        // this should only flash on damage not heal (healthchange event should carry a type or something)
+        lastWarningTime = Time.time;
 
-    }
-
-    private IEnumerator FlashWarningColor()
-    {
-        // this isn't great with multiple sources of damage, potentially check if warning is currently active and then just sustain it?
-        // multiple coroutines can be active simultaneously, might need to set a bool and have it get checked on update?
-        // need to keep track of the last time we took damage and check the time since then a la fire rate.s
-        // new damage instances then only need to update hte "last damaged" time
-        backgroundColorImage.color = warningColor;
-        yield return new WaitForSeconds(1f);
-        backgroundColorImage.color = baseColor;
     }
 
     // weaponmods use this overload
@@ -77,4 +70,17 @@ public class Number_UIDisplay : MonoBehaviour
             m_SelfTMP.SetText(modDict[(WeaponModifier.ModifierType)modTarget].ToString());
         }
     }
+
+    void Update()
+    {
+        // this will set the color every frame - potentially not great performance
+        if (lastWarningTime + warningDuration > Time.time)
+        {
+            backgroundColorImage.color = warningColor;
+        } else
+        {
+            backgroundColorImage.color = baseColor;
+        }
+    }
+
 }
