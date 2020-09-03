@@ -36,7 +36,7 @@ public class Damageable : MonoBehaviour
             health.TakeDamage(totalDamage, damageSource);
             if(parent)
             {
-                parent.ReceiveDamage();
+                parent.ReceiveDamage(damageSource);
             }
         }
     }

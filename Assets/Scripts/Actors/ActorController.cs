@@ -16,7 +16,7 @@ public abstract class ActorController : MonoBehaviour
     public abstract bool IsAlive { get; set; }
     
     public abstract void Die();
-    public abstract void ReceiveDamage();
+    public abstract void ReceiveDamage(GameObject damageSource);
 
 
     public void Awake()

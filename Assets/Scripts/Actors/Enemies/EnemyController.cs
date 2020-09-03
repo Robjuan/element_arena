@@ -55,11 +55,15 @@ public class EnemyController : ActorController
         }
     }
 
-    public override void ReceiveDamage()
+    public override void ReceiveDamage(GameObject damageSource)
     {
         if(anim)
         {
             anim.SetTrigger("ReceiveDamage");
         }
+
+        // todo: make this work based on who actually hit it (using damagesource?)
+        aiSateController.chaseTarget = GameObject.FindWithTag("Player").transform;
+        aiSateController.isAggrod = true;
     }
 }

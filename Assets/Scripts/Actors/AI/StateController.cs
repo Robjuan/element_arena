@@ -21,11 +21,14 @@ public class StateController : MonoBehaviour
 	[HideInInspector] public int nextWayPoint;
 	[HideInInspector] public Transform chaseTarget; // set in LookDecision
 	[HideInInspector] public float stateTimeElapsed;
+	[HideInInspector] public bool isAggrod; // set to true when hit by player (used by AggroDecision)
 
 	public void SetupAI(bool aiActiveParam, NavMeshAgent EnemyControllerNavMeshAgent, EnemyController parentController)
 	{
 		parent = parentController;
 		navMeshAgent = EnemyControllerNavMeshAgent;
+		
+		isAggrod = false;
 
 		aiActive = aiActiveParam;
 		if (aiActive)
