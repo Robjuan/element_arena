@@ -213,9 +213,10 @@ public class WeaponController : MonoBehaviour
         projectileSpawnPosition = projectileAnchorSpawnPoint.position + (GetShotDirection() * projRadius * 2) + (transform.up * projRadius / 1.5f);
 
         placeholderProjectile.transform.position = projectileSpawnPosition;
+        placeholderProjectile.ResetOuterSphereColor();
 
         // if float delay has passed since last update, start fade
-        if (lastPlaceholderFadeReset + placeholderFadeDelay < Time.time)
+        if ((lastPlaceholderFadeReset + placeholderFadeDelay < Time.time) && !placeholderProjectile.isObstructed)
         {
             currentFadeTime += Time.deltaTime;
             if (currentFadeTime > placeholderFadeTime)
@@ -225,6 +226,12 @@ public class WeaponController : MonoBehaviour
             var perc = currentFadeTime / placeholderFadeTime;
             var max = placeholderProjectile.maxTransparencyValue;
             placeholderProjectile.UpdateTransparency(Mathf.Lerp(max, 0, perc));
+        } else if (placeholderProjectile.isObstructed)
+        {
+            placeholderProjectile.HandleObstruction();
+        } else
+        {
+            placeholderProjectile.UpdateTransparency(1);
         }
     }
 
@@ -246,7 +253,7 @@ public class WeaponController : MonoBehaviour
         }
 
         // playerweaponsmanager will call handleshoot on the activeweapon only
-        return firerate && manacost && isActiveWeapon;
+        return firerate && manacost && isActiveWeapon && !placeholderProjectile.isObstructed;
     }
 
     public void HandleShoot()

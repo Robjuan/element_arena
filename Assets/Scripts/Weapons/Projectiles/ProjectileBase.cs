@@ -46,6 +46,8 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
     protected Material outer_StartingMaterial;
 
     protected bool isDestroyed = false;
+    [HideInInspector] public bool isObstructed = false;
+    [HideInInspector] public Color outerSphereLastColor; // for going back after showing red on obstruction
 
     public abstract void ApplyGravity();
     public abstract void ApplyDrag();
@@ -81,7 +83,7 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
         }
     }
 
-    private void ResetMaterials()
+    public void ResetMaterials()
     {
         innerSphereRend.material = inner_StartingMaterial;
         outerSphereRend.material = outer_StartingMaterial;
@@ -109,7 +111,7 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
             UpdateTransparency(1);
 
             // no collisions
-            thisColl.enabled = false;
+            thisColl.isTrigger = true;
         }
     }
 
@@ -150,7 +152,37 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
         return thisColl.radius * scale; // multiply collider radius by localscale
     }
 
-    protected void OnCollisionEnter(Collision coll)
+    // on trigger x should only be called if isTrigger is enabled, ie is placeholder
+    // may also be called if an ext object is a trigger and rego projectile goes in
+    // two triggers do not collide with each other
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isPlaceholder)
+        {
+            isObstructed = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (isPlaceholder)
+        {
+            isObstructed = false;
+        }
+    }
+
+    public void HandleObstruction()
+    {
+        outerSphereLastColor = outerSphereRend.material.color;
+        outerSphereRend.material.SetColor("_Color", new Color(Color.red.r, Color.red.g, Color.red.b, maxTransparencyValue));
+    }
+
+    public void ResetOuterSphereColor()
+    {
+        outerSphereRend.material.SetColor("_Color", outerSphereLastColor);
+    }
+
+    void OnCollisionEnter(Collision coll)
     {
         var other = coll.gameObject;
         Damageable damageable = other.GetComponent<Damageable>();
@@ -167,6 +199,7 @@ public abstract class ProjectileBase : MonoBehaviour, IPooledObject
             DestroyProjectile();
         }
     }
+
 
 
     public void Shoot(Vector3 shotDirection)
