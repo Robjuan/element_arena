@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameFlowManager : MonoBehaviour
 {
+    public Image winMessage;
+    public Image loseMessage;
+
     public List<Objective> objectives;
     private List<Objective> activeObjectives;
 
@@ -30,14 +34,16 @@ public class GameFlowManager : MonoBehaviour
             }
         } else
         {
-            Debug.Log("you completed all objectives and won!!");
-            Invoke("LoadScene", 2f);
+            winMessage.gameObject.SetActive(true);
+            Invoke("LoadScene", 4f);
         }
     }
 
     void LoadScene()
     {
         // 0 is the first scene in our build index, which is our menu scene
+        winMessage.gameObject.SetActive(false);
+        loseMessage.gameObject.SetActive(false);
         SceneManager.LoadScene(0);        
     }
 
@@ -45,8 +51,8 @@ public class GameFlowManager : MonoBehaviour
     {
         if (deadActor.CompareTag("Player"))
         {
-            Debug.Log("You have died.");
-            Invoke("LoadScene", 0.5f);
+            loseMessage.gameObject.SetActive(true);
+            Invoke("LoadScene", 4f);
         }
         //Debug.Log(deadActor + " has died");
     }
