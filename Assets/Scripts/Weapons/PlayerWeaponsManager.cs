@@ -47,6 +47,7 @@ public class PlayerWeaponsManager : MonoBehaviour
 
 
                 weaponSlots[i] = weaponInstance;
+                weaponInstance.SetInactive();
                 //SetActiveWeaponSlot(i);
                 return true;
             }

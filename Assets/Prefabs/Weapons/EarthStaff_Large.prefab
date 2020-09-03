@@ -147,7 +147,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8914866113912059543}
-  m_Mesh: {fileID: 4300000, guid: 6a4e6c74b614b6a4f9cf8384285fc587, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 4f2db797af4e6c7428de6463b59ba904, type: 3}
 --- !u!23 &8914866113912059536
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -205,6 +205,7 @@ MonoBehaviour:
   manaScale: 3
   placeholderFadeTime: 2
   placeholderFadeDelay: 3
+  activeUIColor: {r: 0.00030589104, g: 1, b: 0, a: 0}
   player: {fileID: 0}
   playerMana: {fileID: 0}
   isActiveWeapon: 0

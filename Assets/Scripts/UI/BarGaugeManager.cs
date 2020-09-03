@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 public class BarGaugeManager : MonoBehaviour
 {
+    public Image weaponSpecificBackground;
+    public float wsBackgroundAlpha;
     public List<Gauge_UIDisplay> managedGauges;
 
     private float rectWidth;
@@ -12,7 +16,14 @@ public class BarGaugeManager : MonoBehaviour
     void Start()
     {
         GameEvents.current.onWeaponChange += UpdateMaximumPoints;
+        GameEvents.current.onWeaponChange += UpdateWeaponSpecificBackgroundColor;
         GameEvents.current.onModChange += UpdateAllGaugeDisplay;
+    }
+
+    private void UpdateWeaponSpecificBackgroundColor(WeaponController newWep)
+    {
+        var nwa = newWep.activeUIColor;
+        weaponSpecificBackground.color = new Color(nwa.r, nwa.g, nwa.b, wsBackgroundAlpha);
     }
 
     private void UpdateMaximumPoints(WeaponController newWep)

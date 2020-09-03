@@ -44,11 +44,15 @@ public class WeaponController : MonoBehaviour
     private float currentFadeTime = 0f;
     private float lastPlaceholderFadeReset;
 
+    [Tooltip("UI will overwrite alpha")]
+    public Color activeUIColor;
+
     [HideInInspector]
     public GameObject player;
     [HideInInspector]
     public ManaUser playerMana;
-
+    
+    [HideInInspector]
     public bool isActiveWeapon = false;
 
     // last value trackers
@@ -145,6 +149,7 @@ public class WeaponController : MonoBehaviour
             isActiveWeapon = true;
             GameEvents.current.ModChange(weaponModifierManager.GetCurrentModDict());
             lastPlaceholderFadeReset = Time.time;
+            this.gameObject.SetActive(true);
         }
     }
 
@@ -153,7 +158,8 @@ public class WeaponController : MonoBehaviour
         if (isActiveWeapon)
         {
             isActiveWeapon = false;
-            Destroy(placeholderProjectile.gameObject);  
+            Destroy(placeholderProjectile.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 
